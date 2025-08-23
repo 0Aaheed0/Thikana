@@ -13,12 +13,12 @@ const articles = [
   {
     title: "Multi-Car Pile-Up on I-5 Causes Major Delays",
     description: "A five-car pile-up on Interstate 5 has resulted in major traffic delays. Emergency services are on the scene. Drivers are advised to seek alternate routes.",
-    image: "https://images.unsplash.com/photo-1568602471322-7826e3a5b8a6?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+    image: "https://images.unsplash.com/photo-1737295526610-e6bdb420e9f9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8dHJhZmljJTIwamFtfGVufDB8fDB8fHww"
   },
   {
     title: "Elderly Woman with Dementia Missing from Home",
     description: "An 82-year-old woman with dementia has been reported missing from her home. She is believed to be on foot and may be confused. Please keep an eye out for her.",
-    image: "https://images.unsplash.com/photo-1547425260-76bc4d4b7f2a?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+    image: "https://images.unsplash.com/photo-1658686314526-b5f006c6c43a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8ZWxkZXJseSUyMHdvbWFuJTIwbWlzc2luZ3xlbnwwfHwwfHx8MA%3D%3D"
   },
   {
     title: "Motorcycle Accident on Main Street",
@@ -53,7 +53,7 @@ const articles = [
   {
     title: "Speeding Car Crashes into Building",
     description: "A speeding car lost control and crashed into a building this morning. The driver was taken to the hospital with minor injuries. No one else was hurt.",
-    image: "https://images.unsplash.com/photo-1550355291-b29c6a42e4f8?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+    image: "https://plus.unsplash.com/premium_photo-1661370367221-982fdba4ce89?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Y2FyJTIwY3Jhc2h8ZW58MHx8MHx8fDA%3D"
   }
 ];
 
