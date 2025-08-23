@@ -7,31 +7,31 @@ import './Organizations.css';
 const organizations = [
   {
     name: 'National Center for Missing & Exploited Children',
-    logo: 'https://seeklogo.com/images/N/national-center-for-missing-and-exploited-children-logo-C420000000-seeklogo.com.png',
+    logo: 'https://images.seeklogo.com/logo-png/9/2/national-center-for-missing-and-exploited-children-logo-png_seeklogo-97223.png',
     description: 'The National Center for Missing & Exploited Children is a private, non-profit organization established in 1984 by the United States Congress. NCMEC serves as the national clearinghouse and resource center for information about missing and exploited children.',
     contact: '1-800-THE-LOST (1-800-843-5678)'
   },
   {
     name: 'National Association of Professional Accident Reconstruction Specialists',
-    logo: 'https://www.napars.org/images/logo-napars-2017.png',
+    logo: 'https://images.seeklogo.com/logo-png/7/2/industrial-accident-prevention-association-logo-png_seeklogo-71361.png',
     description: 'NAPARS is a non-profit organization whose members are dedicated to the advancement of the art and science of traffic accident investigation and reconstruction. Their members are from both the private and public sectors.',
     contact: 'info@napars.org'
   },
   {
     name: 'The Doe Network',
-    logo: 'https://brandfetch-prod.s3.amazonaws.com/34391b9d62334c8.png',
+    logo: 'https://images.seeklogo.com/logo-png/4/2/doe-logo-png_seeklogo-42682.png',
     description: 'The Doe Network is a 100% volunteer organization devoted to assisting investigating agencies in bringing closure to national and international cold cases for missing and unidentified persons.',
     contact: 'admin@doenetwork.org'
   },
   {
     name: 'Community United Effort (CUE)',
-    logo: 'https://www.ncmissingpersons.org/wp-content/uploads/2019/11/cue-center-logo.png',
+    logo: 'https://images.seeklogo.com/logo-png/3/2/cue-logo-png_seeklogo-37378.png',
     description: 'CUE Center for Missing Persons is a 501(c)3 non-profit organization that provides advocacy for missing persons and their families. They offer a wide range of services, including search and rescue, victim support, and community education.',
     contact: '(910) 343-1131'
   },
   {
     name: 'Mothers Against Drunk Driving (MADD)',
-    logo: 'https://www.madd.org/wp-content/uploads/2021/03/MADD_Logo_2021.png',
+    logo: 'https://images.seeklogo.com/logo-png/36/2/mothers-against-drunk-driving-logo-png_seeklogo-361209.png',
     description: 'Mothers Against Drunk Driving (MADD) is a non-profit organization in the United States, Canada and Brazil that seeks to stop drunk driving, support those affected by drunk driving, prevent underage drinking, and strive for stricter impaired driving policy, whether that impairment is caused by alcohol or any other drug.',
     contact: '1-877-ASK-MADD (1-877-275-6233)'
   }
