@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import './App.css';
 import logo from './logo.svg';
 
 import ArticleSlider from './ArticleSlider';
 import DataSpecialists from './DataSpecialists';
 import Organizations from './Organizations';
+import LoginPage from './LoginPage';
 
-function App() {
+function HomePage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -43,7 +45,7 @@ function App() {
           <li><a href="#report-missing"><i className="fas fa-user-slash"></i> Report Missing</a></li>
           <li><a href="#report-accident"><i className="fas fa-car-crash"></i> Report Accident</a></li>
           <li><a href="#help-board"><i className="fas fa-hands-helping"></i> Help Board</a></li>
-          <li><a href="#login"><i className="fas fa-sign-in-alt"></i> Login</a></li>
+          <li><Link to="/login"><i className="fas fa-sign-in-alt"></i> Login</Link></li>
           <li><a href="#signup"><i className="fas fa-user-plus"></i> Sign Up</a></li>
         </ul>
       </div>
@@ -53,7 +55,7 @@ function App() {
           <div className="modal-content">
             <span className="close-button" onClick={toggleModal}>&times;</span>
             <p>Already have an account?</p>
-            <button className="modal-button">Login</button>
+            <Link to="/login"><button className="modal-button">Login</button></Link>
             <p>Don't have an account?</p>
             <button className="modal-button">Sign Up</button>
           </div>
@@ -112,6 +114,17 @@ function App() {
         </div>
       </footer>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage />} />
+      </Routes>
+    </Router>
   );
 }
 
