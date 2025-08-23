@@ -1,0 +1,54 @@
+.data-specialists-section {
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+.data-specialists-section h2 {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+}
+
+.specialist-card {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 1rem;
+  text-align: left;
+}
+
+.specialist-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.specialist-info h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.specialist-info h4 {
+  font-size: 1.2rem;
+  color: #555;
+  margin-bottom: 1rem;
+}
+
+.specialist-info p {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.specialist-info h3:hover,
+.specialist-info h4:hover,
+.specialist-info p:hover {
+  text-shadow: 0 0 5px #007bff, 0 0 10px #007bff, 0 0 15px #007bff;
+  transition: text-shadow 0.3s ease-in-out;
+}
+
+.contact-info {
+  font-weight: bold;
+  margin-top: 1rem;
+}

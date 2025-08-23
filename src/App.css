@@ -1,38 +1,279 @@
+/* General Styles */
+body {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 .App {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* Navbar */
+.navbar {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f8f8f8;
+  padding: 1rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+}
+
+.App-logo {
+  height: 40px;
+  margin-right: 1rem;
+  /* Filter to make SVG blue */
+  filter: invert(20%) sepia(100%) saturate(2000%) hue-rotate(200deg) brightness(80%) contrast(100%);
+}
+
+.navbar-title {
+  font-size: 1.5rem;
+  margin: 0;
+  color: #333;
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.menu-button {
+  background-color: transparent;
+  border: none;
+  color: #333;
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin-right: 1rem;
+}
+
+.account-button {
+  background-color: transparent;
+  border: none;
+  color: #333;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -250px;
+  width: 250px;
+  height: 100%;
+  background-color: #f8f8f8;
+  padding: 1rem;
+  transition: left 0.3s ease;
+  z-index: 1000;
+}
+
+.sidebar.open {
+  left: 0;
+}
+
+.close-sidebar-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 1.5rem;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 2rem;
+}
+
+.sidebar li {
+  margin-bottom: 1rem;
+}
+
+.sidebar a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+
+.sidebar a i {
+  margin-right: 0.5rem;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  position: relative;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.modal-content p {
+  margin-bottom: 0.5rem;
+}
+
+.modal-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-bottom: 1rem;
+}
+
+.modal-button:hover {
+  background-color: #0056b3;
+}
+
+/* Hero Section */
+.hero {
+  background-image: url('https://ecdn.dhakatribune.net/contents/cache/images/800x450x1/uploads/dten/2022/05/07/accident-1.jpeg');
+  background-size: cover;
+  background-position: center;
+  color: white;
+  padding: 4rem 2rem;
+  text-align: center;
+  min-height: 400px; /* Ensure enough height */
+  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+}
+
+.hero-content {
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background for readability */
+  padding: 2rem;
+  border-radius: 10px;
+}
+
+.welcome-text {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.description-text {
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.report-options {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.report-button {
+  background-color: #28a745;
   color: white;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1.25rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-.App-link {
-  color: #61dafb;
+.report-button:hover {
+  background-color: #218838;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Statistics Section */
+.statistics-section {
+  display: flex;
+  justify-content: space-around;
+  padding: 3rem 2rem;
+  background-color: #f4f4f4;
+  flex-wrap: wrap;
+}
+
+.statistic-item {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 1rem;
+  flex: 1;
+  min-width: 200px; /* Ensure items don't get too small */
+}
+
+.statistic-item h3 {
+  font-size: 1.8rem;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.statistic-item p {
+  font-size: 1.5rem;
+  color: #007bff;
+  font-weight: bold;
+}
+
+/* Footer */
+.footer {
+  background-color: #333;
+  color: white;
+  padding: 2rem;
+  border-top: 1px solid #ddd;
+}
+
+.footer-content {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.footer-column p {
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+}
+
+.navbar-title:hover,
+.sidebar a:hover,
+.welcome-text:hover,
+.description-text:hover,
+.report-button:hover,
+.statistic-item h3:hover,
+.statistic-item p:hover,
+.footer-column p:hover {
+  text-shadow: 0 0 5px #007bff, 0 0 10px #007bff, 0 0 15px #007bff;
+  transition: text-shadow 0.3s ease-in-out;
 }

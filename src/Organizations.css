@@ -1,0 +1,47 @@
+.organizations-section {
+  padding: 3rem 2rem;
+  text-align: center;
+  background-color: #f4f4f4;
+}
+
+.organizations-section h2 {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+}
+
+.organization-card {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 1rem;
+  text-align: left;
+}
+
+.organization-card img {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  margin-bottom: 1rem;
+}
+
+.organization-info h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.organization-info p {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.organization-info h3:hover,
+.organization-info p:hover {
+  text-shadow: 0 0 5px #007bff, 0 0 10px #007bff, 0 0 15px #007bff;
+  transition: text-shadow 0.3s ease-in-out;
+}
+
+.contact-info {
+  font-weight: bold;
+  margin-top: 1rem;
+}
