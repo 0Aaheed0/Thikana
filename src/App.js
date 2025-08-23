@@ -7,6 +7,7 @@ import ArticleSlider from './ArticleSlider';
 import DataSpecialists from './DataSpecialists';
 import Organizations from './Organizations';
 import LoginPage from './LoginPage';
+import SignupPage from './SignupPage';
 
 function HomePage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -46,7 +47,7 @@ function HomePage() {
           <li><a href="#report-accident"><i className="fas fa-car-crash"></i> Report Accident</a></li>
           <li><a href="#help-board"><i className="fas fa-hands-helping"></i> Help Board</a></li>
           <li><Link to="/login"><i className="fas fa-sign-in-alt"></i> Login</Link></li>
-          <li><a href="#signup"><i className="fas fa-user-plus"></i> Sign Up</a></li>
+          <li><Link to="/signup"><i className="fas fa-user-plus"></i> Sign Up</Link></li>
         </ul>
       </div>
 
@@ -57,7 +58,7 @@ function HomePage() {
             <p>Already have an account?</p>
             <Link to="/login"><button className="modal-button">Login</button></Link>
             <p>Don't have an account?</p>
-            <button className="modal-button">Sign Up</button>
+            <Link to="/signup"><button className="modal-button">Sign Up</button></Link>
           </div>
         </div>
       )}
@@ -123,6 +124,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
       </Routes>
     </Router>
   );
