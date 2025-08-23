@@ -1,32 +1,115 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import logo from './logo.svg';
 
+import ArticleSlider from './ArticleSlider';
+import DataSpecialists from './DataSpecialists';
+import Organizations from './Organizations';
+
 function App() {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
+
   return (
     <div className="App">
       <nav className="navbar">
-        <div className="navbar-logo">
-          <img src={logo} alt="Thikana Logo" />
-          <h1>THIKANA</h1>
+        <div className="navbar-left">
+          <button className="menu-button" onClick={toggleSidebar}>
+            <i className="fas fa-bars"></i>
+          </button>
+          <img src={logo} className="App-logo" alt="Thikana Logo" />
+          <h1 className="navbar-title">THIKANA</h1>
         </div>
-        <ul className="navbar-links">
-          <li><a href="#">Home</a></li>
-          <li><a href="#">About</a></li>
-          <li><a href="#">Contact</a></li>
-        </ul>
+        <div className="navbar-right">
+          <button className="account-button" onClick={toggleModal}>
+            <i className="fas fa-user-circle"></i>
+          </button>
+        </div>
       </nav>
+
+      <div className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
+        <ul>
+          <button className="close-sidebar-button" onClick={toggleSidebar}>&times;</button>
+          <li><a href="#home"><i className="fas fa-home"></i> Home</a></li>
+          <li><a href="#case-archive"><i className="fas fa-archive"></i> Case Archive</a></li>
+          <li><a href="#report-missing"><i className="fas fa-user-slash"></i> Report Missing</a></li>
+          <li><a href="#report-accident"><i className="fas fa-car-crash"></i> Report Accident</a></li>
+          <li><a href="#help-board"><i className="fas fa-hands-helping"></i> Help Board</a></li>
+          <li><a href="#login"><i className="fas fa-sign-in-alt"></i> Login</a></li>
+          <li><a href="#signup"><i className="fas fa-user-plus"></i> Sign Up</a></li>
+        </ul>
+      </div>
+
+      {isModalOpen && (
+        <div className="modal">
+          <div className="modal-content">
+            <span className="close-button" onClick={toggleModal}>&times;</span>
+            <p>Already have an account?</p>
+            <button className="modal-button">Login</button>
+            <p>Don't have an account?</p>
+            <button className="modal-button">Sign Up</button>
+          </div>
+        </div>
+      )}
 
       <header className="hero">
         <div className="hero-content">
-          <h2>Welcome to THIKANA</h2>
-          <p>Your one-stop solution for finding your dream home.</p>
-          <button className="hero-button">Get Started</button>
+          <h2 className="welcome-text">Welcome to THIKANA</h2>
+          <p className="description-text">Your trusted platform for reporting and tracking incidents. We are here to help you make a difference.</p>
+          <div className="report-options">
+            <button className="report-button">Report Road Accident</button>
+            <button className="report-button">Report Missing</button>
+          </div>
         </div>
       </header>
 
+      <ArticleSlider />
+
+      <section className="statistics-section">
+        <div className="statistic-item">
+          <h3>Total Cases</h3>
+          <p>1234</p>
+        </div>
+        <div className="statistic-item">
+          <h3>Reports</h3>
+          <p>567</p>
+        </div>
+        <div className="statistic-item">
+          <h3>Road Accidents</h3>
+          <p>89</p>
+        </div>
+        <div className="statistic-item">
+          <h3>Resolved Cases</h3>
+          <p>1000</p>
+        </div>
+      </section>
+
+      <DataSpecialists />
+      <Organizations />
+
       <footer className="footer">
-        <p>&copy; 2025 THIKANA. All rights reserved.</p>
+        <div className="footer-content">
+          <div className="footer-column">
+            <p>Helpline: +123 456 7890</p>
+            <p>Contact: info@thikana.com</p>
+            <p>Emergency: 911</p>
+            <p>Press: press@thikana.com</p>
+          </div>
+          <div className="footer-column">
+            <p>Address: 123 Main Street, Anytown, USA</p>
+            <p>Fax: +123 456 7891</p>
+            <p>Legal: legal@thikana.com</p>
+            <p>Careers: careers@thikana.com</p>
+          </div>
+        </div>
       </footer>
     </div>
   );
