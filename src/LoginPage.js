@@ -1,7 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './LoginPage.css';
+import ForgotPassword from './ForgotPassword';
 
 function LoginPage() {
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+
+  const handleForgotPasswordClick = () => {
+    setShowForgotPassword(true);
+  };
+
+  const handleForgotPasswordClose = () => {
+    setShowForgotPassword(false);
+  };
+
   return (
     <div className="login-page">
       <div className="login-container">
@@ -18,11 +29,12 @@ function LoginPage() {
           <button type="submit" className="login-button">Login</button>
         </form>
         <div className="extra-links">
-          <a href="/forgot-password">Forgot Password?</a>
+          <a href="#" onClick={handleForgotPasswordClick}>Forgot Password?</a>
           <span> | </span>
           <a href="/signup">Create an account</a>
         </div>
       </div>
+      {showForgotPassword && <ForgotPassword onForgotPasswordClose={handleForgotPasswordClose} />}
     </div>
   );
 }
