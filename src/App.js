@@ -8,6 +8,7 @@ import DataSpecialists from './DataSpecialists';
 import Organizations from './Organizations';
 import LoginPage from './LoginPage';
 import SignupPage from './SignupPage';
+import CaseArchive from './CaseArchive';
 
 function HomePage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -42,7 +43,7 @@ function HomePage() {
         <ul>
           <button className="close-sidebar-button" onClick={toggleSidebar}>&times;</button>
           <li><a href="#home"><i className="fas fa-home"></i> Home</a></li>
-          <li><a href="#case-archive"><i className="fas fa-archive"></i> Case Archive</a></li>
+          <li><Link to="/case-archive"><i className="fas fa-archive"></i> Case Archive</Link></li>
           <li><a href="#report-missing"><i className="fas fa-user-slash"></i> Report Missing</a></li>
           <li><a href="#report-accident"><i className="fas fa-car-crash"></i> Report Accident</a></li>
           <li><a href="#help-board"><i className="fas fa-hands-helping"></i> Help Board</a></li>
@@ -78,8 +79,10 @@ function HomePage() {
 
       <section className="statistics-section">
         <div className="statistic-item">
-          <h3>Total Cases</h3>
-          <p>1234</p>
+          <Link to="/case-archive">
+            <h3>Total Cases</h3>
+            <p>1234</p>
+          </Link>
         </div>
         <div className="statistic-item">
           <h3>Reports</h3>
@@ -125,6 +128,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route path="/case-archive" element={<CaseArchive />} />
       </Routes>
     </Router>
   );
