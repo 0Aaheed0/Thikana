@@ -8,7 +8,7 @@ function LoginPage() {
         <h2>Login</h2>
         <form>
           <div className="input-group">
-            <label htmlFor="username">Username</label>
+            <label htmlFor="user-name">Username</label>
             <input type="text" id="username" name="username" required />
           </div>
           <div className="input-group">
