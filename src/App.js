@@ -104,14 +104,14 @@ function HomePage() {
       <footer className="footer">
         <div className="footer-content">
           <div className="footer-column">
-            <p>Helpline: +123 456 7890</p>
-            <p>Contact: info@thikana.com</p>
-            <p>Emergency: 911</p>
-            <p>Press: press@thikana.com</p>
+            <p>Helpline: +880 2 12345678 </p>
+            <p>Contact: thikana@gmail.com</p>
+            <p>Emergency: 999</p>
+            <p>Press: somoytv@gmail.com</p>
           </div>
           <div className="footer-column">
-            <p>Address: 123 Main Street, Anytown, USA</p>
-            <p>Fax: +123 456 7891</p>
+            <p>Address: 123 Love Road, Tejgaon, Dhaka</p>
+            <p>Fax: +1-212-9876543</p>
             <p>Legal: legal@thikana.com</p>
             <p>Careers: careers@thikana.com</p>
           </div>
