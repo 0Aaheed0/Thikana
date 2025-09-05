@@ -54,7 +54,7 @@ body {
   color: #333;
   font-size: 1.5rem;
   cursor: pointer;
-  margin-right: 1rem;
+  margin-right: 2rem;
 }
 
 .account-button {
@@ -78,7 +78,7 @@ body {
 }
 
 .sidebar.open {
-  left: 0;
+  left: 20px;
 }
 
 .close-sidebar-button {

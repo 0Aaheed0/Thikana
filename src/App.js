@@ -41,7 +41,7 @@ function HomePage() {
 
       <div className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
         <ul>
-          <button className="close-sidebar-button" onClick={toggleSidebar}>&times;</button>
+          {isSidebarOpen && <button className="close-sidebar-button" onClick={toggleSidebar}>&times;</button>}
           <li><a href="#home"><i className="fas fa-home"></i> Home</a></li>
           <li><Link to="/case-archive"><i className="fas fa-archive"></i> Case Archive</Link></li>
           <li><a href="#report-missing"><i className="fas fa-user-slash"></i> Report Missing</a></li>
