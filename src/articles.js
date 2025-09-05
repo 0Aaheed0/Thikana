@@ -5,7 +5,7 @@ const articles = [
       shortDescription: "Adam Warlock is missing since yesterday.",
       description: `Adam warlock, a 16-year-old, was last seen on September 1st, 2025, 
       near the downtown library. He is 5'10" tall and has brown hair.`,
-      image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      image: "https://media.istockphoto.com/id/924727534/photo/man-sitting-holding-head-in-hands-stressed-sad-young-male-having-mental-problems-feeling-bad.webp?a=1&b=1&s=612x612&w=0&k=20&c=BkWHo9Q_J2CV-7LV3n2j_QJoBn5NHn8v-awjJ1t1clU=",
       caseType: "missing"
     },
     {
@@ -14,7 +14,7 @@ const articles = [
       shortDescription: "A multi-vehicle collision has occurred on I-5.",
       description: `A multi-vehicle collision has occurred on I-5 Northbound near exit 255. 
       All lanes are currently blocked, and major delays are expected.`,
-      image: "https://images.unsplash.com/photo-1568602471322-7832952cc4c5?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      image: "https://images.unsplash.com/photo-1688164548686-f9a02265059e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHZlaGljbGUlMjBhY2NpZGVudHxlbnwwfHwwfHx8MA%3D%3D",
       caseType: "road-accident"
     },
     {
@@ -23,7 +23,7 @@ const articles = [
       shortDescription: "Jane Smith is a missing elderly woman.",
       description: `Jane Smith, an 82-year-old woman with dementia, has been missing from her home since 10:00 AM on September 4th, 2025. 
       She was last seen in the Rosewood neighborhood.`,
-      image: "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      image: "https://media.istockphoto.com/id/2167218240/photo/young-asian-woman-teaching-her-retired-mother-to-use-new-technology.webp?a=1&b=1&s=612x612&w=0&k=20&c=jrq1BL2h5eC_M13ql2yeMOe88Jb_wNwFurUo8yZDZ70=",
       caseType: "missing"
     },
     {
@@ -32,7 +32,7 @@ const articles = [
       shortDescription: "A motorcycle accident has occurred on Main and 4th.",
       description: `A serious accident involving a motorcycle and a sedan occurred at the intersection of Main Street and 4th Avenue. 
       The intersection is partially blocked.`,
-      image: "https://images.unsplash.com/photo-1600058927728-985c56635a57?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      image: "https://media.istockphoto.com/id/97476590/photo/motorcycle-crash.webp?a=1&b=1&s=612x612&w=0&k=20&c=c94k9gLK1Ssyu0M3YFHTlnRJ39XgFZNmgKbTGqySQAo=",
       caseType: "road-accident"
     },
     {
@@ -41,7 +41,7 @@ const articles = [
       shortDescription: "A hiker has gone missing in Green Valley National Park.",
       description: `A 28-year-old hiker, Mike Miller, has been missing since September 3rd, 2025, in Green Valley National Park. 
       He was last seen near the Eagle Peak trail.`,
-      image: "https://images.unsplash.com/photo-1507525428034-b723a996f3d1?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      image: "https://media.istockphoto.com/id/1306456269/photo/hiker-on-the-walk-in-the-spooky-forest.webp?a=1&b=1&s=612x612&w=0&k=20&c=OkZ37af2yTB80uz_58qzvM_ky7rWyQcY-W1ieAqgvNY=",
       caseType: "missing"
     },
     {
@@ -50,7 +50,7 @@ const articles = [
       shortDescription: "A cyclist was injured in a hit-and-run.",
       description: `A cyclist was struck by a vehicle in a hit-and-run incident on Elm Street. 
       The vehicle is described as a dark-colored sedan.`,
-      image: "https://images.unsplash.com/photo-1559116345-44694926a4c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      image: "https://media.istockphoto.com/id/1292290313/photo/traffic-accident-between-bicycle-and-a-car.webp?a=1&b=1&s=612x612&w=0&k=20&c=LKbX6ucOtM1dopXzU1VU1aWuUkZyUFdyZG5Fx2p1k-U=",
       caseType: "road-accident"
     },
     {
@@ -59,7 +59,7 @@ const articles = [
       shortDescription: "An Amber Alert has been issued for a 5-year-old girl.",
       description: `An Amber Alert has been issued for Emily Chen, a 5-year-old girl abducted from her home. 
       The suspect is believed to be driving a blue sedan.`,
-      image: "https://images.unsplash.com/photo-1516625142135-4b858ab61a6a?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      image: "https://media.istockphoto.com/id/540599746/photo/runaway-or-lost-girl-holding-old-ragged-teddy-bear.webp?a=1&b=1&s=612x612&w=0&k=20&c=HCZiEm7MCYoGKtppyw6IUe1tnzGs4VGXZDpg3eZjfK4=",
       caseType: "missing"
     },
     {
@@ -68,7 +68,7 @@ const articles = [
       shortDescription: "A jackknifed truck is blocking Highway 101.",
       description: `A jackknifed semi-truck is blocking all southbound lanes of Highway 101. 
       The road is expected to be closed for several hours.`,
-      image: "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      image: "https://images.unsplash.com/photo-1591419478162-a4dd21b7ec0a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8dHJ1Y2t8ZW58MHx8MHx8fDA%3D",
       caseType: "road-accident"
     }
   ];
