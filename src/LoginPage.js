@@ -9,10 +9,6 @@ function LoginPage() {
     setShowForgotPassword(true);
   };
 
-  const handleForgotPasswordClose = () => {
-    setShowForgotPassword(false);
-  };
-
   return (
     <div className="login-page">
       <div className="login-container">
@@ -34,7 +30,7 @@ function LoginPage() {
           <a href="/signup">Create an account</a>
         </div>
       </div>
-      {showForgotPassword && <ForgotPassword onForgotPasswordClose={handleForgotPasswordClose} />}
+      {showForgotPassword && <ForgotPassword />}
     </div>
   );
 }
