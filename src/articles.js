@@ -10,19 +10,19 @@ const articles = [
     },
     {
       id: 2,
-      title: "Major Pile-Up on I-5 Northbound",
-      shortDescription: "A multi-vehicle collision has occurred on I-5.",
-      description: `A multi-vehicle collision has occurred on I-5 Northbound near exit 255. 
+      title: "Major Pile-Up on Kochukhet",
+      shortDescription: "A multi-vehicle collision has occurred.",
+      description: `A multi-vehicle collision has occurred on Kochukhet near exit highway. 
       All lanes are currently blocked, and major delays are expected.`,
       image: "https://images.unsplash.com/photo-1688164548686-f9a02265059e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHZlaGljbGUlMjBhY2NpZGVudHxlbnwwfHwwfHx8MA%3D%3D",
       caseType: "road-accident"
     },
     {
       id: 3,
-      title: "Elderly Woman, Jane Smith, 82, Missing",
-      shortDescription: "Jane Smith is a missing elderly woman.",
-      description: `Jane Smith, an 82-year-old woman with dementia, has been missing from her home since 10:00 AM on September 4th, 2025. 
-      She was last seen in the Rosewood neighborhood.`,
+      title: "Elderly Woman, Sheikh Hasina, 82, Missing",
+      shortDescription: "Sheikh Hasina is a missing elderly woman.",
+      description: `Sheikh Hasina, an 82-year-old woman with dementia, has been missing from her home since 10:00 AM on September 4th, 2025. 
+      She was last seen in the Dhanmondi neighborhood.`,
       image: "https://media.istockphoto.com/id/2167218240/photo/young-asian-woman-teaching-her-retired-mother-to-use-new-technology.webp?a=1&b=1&s=612x612&w=0&k=20&c=jrq1BL2h5eC_M13ql2yeMOe88Jb_wNwFurUo8yZDZ70=",
       caseType: "missing"
     },
@@ -30,7 +30,7 @@ const articles = [
       id: 4,
       title: "Motorcycle Accident on Main and 4th",
       shortDescription: "A motorcycle accident has occurred on Main and 4th.",
-      description: `A serious accident involving a motorcycle and a sedan occurred at the intersection of Main Street and 4th Avenue. 
+      description: `A serious accident involving a motorcycle and a sedan occurred at the intersection of Main Street and Dhaka-Rajshahi Highway. 
       The intersection is partially blocked.`,
       image: "https://media.istockphoto.com/id/97476590/photo/motorcycle-crash.webp?a=1&b=1&s=612x612&w=0&k=20&c=c94k9gLK1Ssyu0M3YFHTlnRJ39XgFZNmgKbTGqySQAo=",
       caseType: "road-accident"
@@ -39,25 +39,25 @@ const articles = [
       id: 5,
       title: "Hiker Missing in Green Valley National Park",
       shortDescription: "A hiker has gone missing in Green Valley National Park.",
-      description: `A 28-year-old hiker, Mike Miller, has been missing since September 3rd, 2025, in Green Valley National Park. 
+      description: `A 28-year-old hiker, Obaidul Kader, has been missing since September 3rd, 2025, in Green Valley National Park. 
       He was last seen near the Eagle Peak trail.`,
       image: "https://media.istockphoto.com/id/1306456269/photo/hiker-on-the-walk-in-the-spooky-forest.webp?a=1&b=1&s=612x612&w=0&k=20&c=OkZ37af2yTB80uz_58qzvM_ky7rWyQcY-W1ieAqgvNY=",
       caseType: "missing"
     },
     {
       id: 6,
-      title: "Hit-and-Run on Elm Street",
+      title: "Hit-and-Run on Tejgaon Industrial Area",
       shortDescription: "A cyclist was injured in a hit-and-run.",
-      description: `A cyclist was struck by a vehicle in a hit-and-run incident on Elm Street. 
+      description: `A cyclist was struck by a vehicle in a hit-and-run incident on Tejgaon Industrial Area. 
       The vehicle is described as a dark-colored sedan.`,
       image: "https://media.istockphoto.com/id/1292290313/photo/traffic-accident-between-bicycle-and-a-car.webp?a=1&b=1&s=612x612&w=0&k=20&c=LKbX6ucOtM1dopXzU1VU1aWuUkZyUFdyZG5Fx2p1k-U=",
       caseType: "road-accident"
     },
     {
       id: 7,
-      title: "Amber Alert: 5-Year-Old Emily Chen Missing",
+      title: "Amber Alert: 5-Year-Old Sumaiya Tasfia+ Missing",
       shortDescription: "An Amber Alert has been issued for a 5-year-old girl.",
-      description: `An Amber Alert has been issued for Emily Chen, a 5-year-old girl abducted from her home. 
+      description: `An Amber Alert has been issued for Sumaiya Tasfia, a 5-year-old girl abducted from her home. 
       The suspect is believed to be driving a blue sedan.`,
       image: "https://media.istockphoto.com/id/540599746/photo/runaway-or-lost-girl-holding-old-ragged-teddy-bear.webp?a=1&b=1&s=612x612&w=0&k=20&c=HCZiEm7MCYoGKtppyw6IUe1tnzGs4VGXZDpg3eZjfK4=",
       caseType: "missing"
@@ -81,8 +81,8 @@ const articles = [
     },
     {
       id: 10,
-      title: "Water Supply Request for Maple Street",
-      shortDescription: "Residents of Maple Street have requested water supply restoration.",
+      title: "Water Supply Request for 22 BakerStreet",
+      shortDescription: "Residents of Baker Street have requested water supply restoration.",
       description: `Due to ongoing maintenance, water supply was interrupted. Residents have submitted a request for urgent restoration.`,
       image: "https://images.unsplash.com/photo-1464983953574-0892a716854b?w=500&auto=format&fit=crop&q=60",
       caseType: "request"
