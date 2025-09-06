@@ -128,6 +128,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route path="/case-archive" element={<CaseArchive />} />
         <Route path="/case-archive/:caseType" element={<CaseArchive />} />
       </Routes>
     </Router>
