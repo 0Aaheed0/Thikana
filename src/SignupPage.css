@@ -3,7 +3,7 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #f0f2f5;
+    background: linear-gradient(to right, #6a11cb, #2575fc);
   }
   
   .signup-container {
