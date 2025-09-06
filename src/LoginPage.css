@@ -36,8 +36,30 @@
     width: 100%;
     padding: 0.75rem;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 10px;
     box-sizing: border-box;
+  }
+
+  .password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .password-wrapper input {
+    width: 100%;
+    padding-right: 60px; /* Make space for the button */
+  }
+
+  .toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #555;
+    cursor: pointer;
   }
   
   .login-button {

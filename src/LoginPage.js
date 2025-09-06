@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
 import './LoginPage.css';
 import ForgotPassword from './ForgotPassword';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 function LoginPage() {
   const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleForgotPasswordClick = () => {
     setShowForgotPassword(true);
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -20,7 +26,12 @@ function LoginPage() {
           </div>
           <div className="input-group">
             <label htmlFor="password">Password</label>
-            <input type="password" id="password" name="password" required />
+            <div className="password-wrapper">
+              <input type={showPassword ? 'text' : 'password'} id="password" name="password" required />
+              <button type="button" onClick={togglePasswordVisibility} className="toggle-password">
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
           </div>
           <button type="submit" className="login-button">Login</button>
         </form>
