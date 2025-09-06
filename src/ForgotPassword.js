@@ -1,27 +1,46 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './ForgotPassword.css';
 
-const ForgotPassword = ({ onForgotPasswordClose }) => {
-  const handleForgotPasswordSubmit = (e) => {
-    e.preventDefault();
-    const email = e.target.email.value;
-    console.log(`Sending verification code to ${email}`);
-    // Here you would typically handle sending the verification code
-    onForgotPasswordClose();
+const ForgotPassword = () => {
+  const [email, setEmail] = useState('');
+  const [showPopup, setShowPopup] = useState(true);
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // For demonstration, we'll just show an alert.
+    // In a real application, you would handle the email verification process.
+    alert(`A verification link has been sent to ${email}`);
+    setShowPopup(false);
+  };
+
+  const handleClose = () => {
+    setShowPopup(false);
+  };
+
+  if (!showPopup) {
+    return null;
+  }
+
   return (
-    <div className="forgot-password-popup">
-      <div className="forgot-password-popup-content">
+    <div className="popup-overlay">
+      <div className="popup-content">
+        <button className="close-button" onClick={handleClose}>X</button>
         <h2>Forgot Password</h2>
-        <form onSubmit={handleForgotPasswordSubmit}>
-          <label htmlFor="email">Enter your email:</label>
-          <input type="email" id="email" name="email" required />
-          <button type="submit">Send Verification Code</button>
+        <p>Please enter your email address to receive a verification link.</p>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="email"
+            placeholder="Enter your email"
+            value={email}
+            onChange={handleEmailChange}
+            required
+          />
+          <button type="submit">Send Verification Link</button>
         </form>
-        <button className="close-button" onClick={onForgotPasswordClose}>
-          Close
-        </button>
       </div>
     </div>
   );
