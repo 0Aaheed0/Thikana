@@ -70,6 +70,38 @@ const articles = [
       The road is expected to be closed for several hours.`,
       image: "https://images.unsplash.com/photo-1591419478162-a4dd21b7ec0a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8dHJ1Y2t8ZW58MHx8MHx8fDA%3D",
       caseType: "road-accident"
+    },
+    {
+      id: 9,
+      title: "Fire at Oakwood Apartments",
+      shortDescription: "A fire broke out at Oakwood Apartments, several units affected.",
+      description: `A fire started on the third floor of Oakwood Apartments. Firefighters responded quickly and contained the blaze. No injuries reported.`,
+      image: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?w=500&auto=format&fit=crop&q=60",
+      caseType: "complaint"
+    },
+    {
+      id: 10,
+      title: "Water Supply Request for Maple Street",
+      shortDescription: "Residents of Maple Street have requested water supply restoration.",
+      description: `Due to ongoing maintenance, water supply was interrupted. Residents have submitted a request for urgent restoration.`,
+      image: "https://images.unsplash.com/photo-1464983953574-0892a716854b?w=500&auto=format&fit=crop&q=60",
+      caseType: "request"
+    },
+    {
+      id: 11,
+      title: "Application for Community Park Renovation",
+      shortDescription: "An application has been submitted to renovate the community park.",
+      description: `Local residents have submitted an application to renovate the community park, including new playground equipment and landscaping.`,
+      image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=500&auto=format&fit=crop&q=60",
+      caseType: "application"
+    },
+    {
+      id: 12,
+      title: "Resolved: Street Light Issue on Pine Avenue",
+      shortDescription: "Street lights on Pine Avenue have been repaired and are now operational.",
+      description: `The complaint regarding non-functional street lights on Pine Avenue has been resolved. All lights are now working.`,
+      image: "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?w=500&auto=format&fit=crop&q=60",
+      caseType: "complaint"
     }
   ];
   
