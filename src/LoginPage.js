@@ -29,7 +29,7 @@ function LoginPage() {
           <button type="submit" className="login-button">Login</button>
         </form>
         <div className="extra-links">
-          <a href="#" onClick={handleForgotPasswordClick}>Forgot Password?</a>
+          <button onClick={handleForgotPasswordClick} className="link-button">Forgot Password?</button>
           <span> | </span>
           <a href="/signup">Create an account</a>
         </div>

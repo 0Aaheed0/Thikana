@@ -30,6 +30,7 @@
     display: block;
     margin-bottom: 0.5rem;
     color: #555;
+    font-weight: bold;
   }
   
   .input-group input {
