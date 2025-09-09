@@ -23,7 +23,9 @@
     "start": "cross-env PORT=3002 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "dev": "concurrently --names \"frontend,backend\" \"npm start\" \"npm run server\"",
+    "server": "cd backend/server && npm run dev"
   },
   "eslintConfig": {
     "extends": [
@@ -44,6 +46,7 @@
     ]
   },
   "devDependencies": {
-    "cross-env": "^10.0.0"
+    "cross-env": "^10.0.0",
+    "concurrently": "^8.2.2"
   }
 }
