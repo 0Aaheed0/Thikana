@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 
-dotenv.config();
+dotenv.config({ path: 'H:\\SD\\thikana\\Thikana\\backend\\server\\.env' });
 
 const app = express();
 app.use(cors({ origin: "http://localhost:3002" }));
@@ -16,7 +16,7 @@ mongoose.connect(process.env.MONGO_URI)
 
 import User from './models/User.js';
 
-app.post("/signup", async (req, res) => {
+app.post("/api/signup", async (req, res) => {
   try {
     const { username, email, password } = req.body;
 
@@ -37,7 +37,7 @@ app.post("/signup", async (req, res) => {
   }
 });
 
-app.post("/login", (req, res) => {
+app.post("/api/login", (req, res) => {
   console.log(req.body);
   res.json({ message: "Login successful!" });
 });
