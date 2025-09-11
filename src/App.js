@@ -9,6 +9,7 @@ import Organizations from './Organizations';
 import LoginPage from './LoginPage';
 import SignupPage from './SignupPage';
 import CaseArchive from './CaseArchive';
+import HelpBoard from './HelpBoard';
 
 function HomePage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -46,7 +47,7 @@ function HomePage() {
           <li><Link to="/case-archive"><i className="fas fa-archive"></i> Case Archive</Link></li>
           <li><a href="#report-missing"><i className="fas fa-user-slash"></i> Report Missing</a></li>
           <li><a href="#report-accident"><i className="fas fa-car-crash"></i> Report Accident</a></li>
-          <li><a href="#help-board"><i className="fas fa-hands-helping"></i> Help Board</a></li>
+          <li><Link to="/help-board"><i className="fas fa-hands-helping"></i> Help Board</Link></li>
           <li><Link to="/login"><i className="fas fa-sign-in-alt"></i> Login</Link></li>
           <li><Link to="/signup"><i className="fas fa-user-plus"></i> Sign Up</Link></li>
         </ul>
@@ -95,6 +96,12 @@ function HomePage() {
         <div className="statistic-item">
           <h3>Resolved Cases</h3>
           <p>1000</p>
+        </div>
+        <div className="statistic-item">
+          <Link to="/help-board">
+            <h3>Help Board</h3>
+            <p>Get Help</p>
+          </Link>
         </div>
       </section>
 
