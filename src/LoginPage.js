@@ -13,6 +13,8 @@ function LoginPage() {
   });
   const [error, setError] = useState('');
 
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
   const handleForgotPasswordClick = () => {
     setShowForgotPassword(true);
   };
@@ -28,7 +30,7 @@ function LoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:5000/login', formData);
+      const res = await axios.post(`${API_URL}/login`, formData);
       localStorage.setItem('token', res.data.token);
       window.location.href = '/';
     } catch (err) {
