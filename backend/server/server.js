@@ -3,7 +3,8 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 
-dotenv.config({ path: 'H:\\SD\\thikana\\Thikana\\backend\\server\\.env' });
+dotenv.config();
+
 
 const app = express();
 app.use(cors({ origin: "http://localhost:3002" }));

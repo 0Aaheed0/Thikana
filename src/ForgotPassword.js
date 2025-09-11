@@ -11,8 +11,7 @@ const ForgotPassword = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // For demonstration, we'll just show an alert.
-    // In a real application, you would handle the email verification process.
+    
     alert(`A verification link has been sent to ${email}`);
     setShowPopup(false);
   };
