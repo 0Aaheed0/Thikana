@@ -10,7 +10,7 @@
 .faq-list {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1rem;
     width: 80%;
     margin-top: 2rem;
 }
@@ -21,15 +21,21 @@
     padding: 1rem;
     background: white;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
-.faq-card h2 {
-    margin: 0 0 0.5rem;
+.faq-card:hover {
+    background: #f9f9f9;
+}
+
+.faq-question {
+    margin: 0;
     font-size: 1.3rem;
     color: #333;
 }
 
-.faq-card p {
-    margin: 0;
+.faq-answer {
+    margin-top: 0.5rem;
     line-height: 1.5;
 }
