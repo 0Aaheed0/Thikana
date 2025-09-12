@@ -21,7 +21,6 @@
     padding: 1rem;
     background: white;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    cursor: pointer;
     transition: all 0.3s ease;
 }
 
@@ -29,10 +28,23 @@
     background: #f9f9f9;
 }
 
+.faq-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
 .faq-question {
     margin: 0;
     font-size: 1.3rem;
     color: #333;
+}
+
+.faq-icon {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-left: 1rem;
 }
 
 .faq-answer {

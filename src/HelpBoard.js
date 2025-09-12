@@ -29,10 +29,8 @@ const HelpBoard = () => {
 
   const toggleFAQ = (index) => {
     if (openIndexes.includes(index)) {
-      // remove from openIndexes
       setOpenIndexes(openIndexes.filter(i => i !== index));
     } else {
-      // add to openIndexes
       setOpenIndexes([...openIndexes, index]);
     }
   };
@@ -41,16 +39,20 @@ const HelpBoard = () => {
     <div className="help-board-container">
       <h1>HELP BOARD - FAQ</h1>
       <div className="faq-list">
-        {faqs.map((faq, index) => (
-          <div key={index} className="faq-card">
-            <h2 onClick={() => toggleFAQ(index)} className="faq-question">
-              Q: {faq.question}
-            </h2>
-            {openIndexes.includes(index) && (
-              <p className="faq-answer"><strong>A:</strong> {faq.answer}</p>
-            )}
-          </div>
-        ))}
+        {faqs.map((faq, index) => {
+          const isOpen = openIndexes.includes(index);
+          return (
+            <div key={index} className="faq-card">
+              <div className="faq-header" onClick={() => toggleFAQ(index)}>
+                <h2 className="faq-question">Q: {faq.question}</h2>
+                <span className="faq-icon">{isOpen ? "−" : "+"}</span>
+              </div>
+              {isOpen && (
+                <p className="faq-answer"><strong>A:</strong> {faq.answer}</p>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
