@@ -40,35 +40,72 @@ function HomePage() {
         </div>
       </nav>
 
+      {/* Sidebar */}
       <div className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
         <ul>
-          {isSidebarOpen && <button className="close-sidebar-button" onClick={toggleSidebar}>&times;</button>}
-          <li><a href="#home"><i className="fas fa-home"></i> Home</a></li>
-          <li><Link to="/case-archive"><i className="fas fa-archive"></i> Case Archive</Link></li>
-          <li><a href="#report-missing"><i className="fas fa-user-slash"></i> Report Missing</a></li>
-          <li><a href="#report-accident"><i className="fas fa-car-crash"></i> Report Accident</a></li>
-          <li><Link to="/help-board"><i className="fas fa-hands-helping"></i> Help Board</Link></li>
-          <li><Link to="/login"><i className="fas fa-sign-in-alt"></i> Login</Link></li>
-          <li><Link to="/signup"><i className="fas fa-user-plus"></i> Sign Up</Link></li>
+          {isSidebarOpen && (
+            <button className="close-sidebar-button" onClick={toggleSidebar}>
+              &times;
+            </button>
+          )}
+          <li>
+            <a href="#home"><i className="fas fa-home"></i> Home</a>
+          </li>
+          <li>
+            <Link to="/case-archive" onClick={toggleSidebar}>
+              <i className="fas fa-archive"></i> Case Archive
+            </Link>
+          </li>
+          <li>
+            <a href="#report-missing"><i className="fas fa-user-slash"></i> Report Missing</a>
+          </li>
+          <li>
+            <a href="#report-accident"><i className="fas fa-car-crash"></i> Report Accident</a>
+          </li>
+          <li>
+            <Link to="/help-board" onClick={toggleSidebar}>
+              <i className="fas fa-hands-helping"></i> Help Board
+            </Link>
+          </li>
+          <li>
+            <Link to="/login" onClick={toggleSidebar}>
+              <i className="fas fa-sign-in-alt"></i> Login
+            </Link>
+          </li>
+          <li>
+            <Link to="/signup" onClick={toggleSidebar}>
+              <i className="fas fa-user-plus"></i> Sign Up
+            </Link>
+          </li>
         </ul>
       </div>
 
+      {/* Modal */}
       {isModalOpen && (
         <div className="modal">
           <div className="modal-content">
-            <span className="close-button" onClick={toggleModal}>&times;</span>
+            <span className="close-button" onClick={toggleModal}>
+              &times;
+            </span>
             <p>Already have an account?</p>
-            <Link to="/login"><button className="modal-button">Login</button></Link>
+            <Link to="/login" onClick={toggleModal}>
+              <button className="modal-button">Login</button>
+            </Link>
             <p>Don't have an account?</p>
-            <Link to="/signup"><button className="modal-button">Sign Up</button></Link>
+            <Link to="/signup" onClick={toggleModal}>
+              <button className="modal-button">Sign Up</button>
+            </Link>
           </div>
         </div>
       )}
 
+      {/* Hero */}
       <header className="hero">
         <div className="hero-content">
           <h2 className="welcome-text">Welcome to THIKANA</h2>
-          <p className="description-text">Your trusted platform for reporting and tracking incidents. We are here to help you make a difference.</p>
+          <p className="description-text">
+            Your trusted platform for reporting and tracking incidents. We are here to help you make a difference.
+          </p>
           <div className="report-options">
             <button className="report-button">Report Road Accident</button>
             <button className="report-button">Report Missing</button>
@@ -78,6 +115,7 @@ function HomePage() {
 
       <ArticleSlider />
 
+      {/* Stats */}
       <section className="statistics-section">
         <div className="statistic-item">
           <Link to="/case-archive">
@@ -137,6 +175,7 @@ function App() {
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/case-archive" element={<CaseArchive />} />
         <Route path="/case-archive/:caseType" element={<CaseArchive />} />
+        <Route path="/help-board" element={<HelpBoard />} /> {/* ✅ Fixed */}
       </Routes>
     </Router>
   );
