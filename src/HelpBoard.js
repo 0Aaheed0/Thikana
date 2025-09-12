@@ -25,10 +25,16 @@ const HelpBoard = () => {
     }
   ];
 
-  const [openIndex, setOpenIndex] = useState(null);
+  const [openIndexes, setOpenIndexes] = useState([]);
 
   const toggleFAQ = (index) => {
-    setOpenIndex(openIndex === index ? null : index);
+    if (openIndexes.includes(index)) {
+      // remove from openIndexes
+      setOpenIndexes(openIndexes.filter(i => i !== index));
+    } else {
+      // add to openIndexes
+      setOpenIndexes([...openIndexes, index]);
+    }
   };
 
   return (
@@ -40,7 +46,7 @@ const HelpBoard = () => {
             <h2 onClick={() => toggleFAQ(index)} className="faq-question">
               Q: {faq.question}
             </h2>
-            {openIndex === index && (
+            {openIndexes.includes(index) && (
               <p className="faq-answer"><strong>A:</strong> {faq.answer}</p>
             )}
           </div>
