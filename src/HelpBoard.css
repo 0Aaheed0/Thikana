@@ -7,12 +7,19 @@
     background-color: lightblue;
 }
 
+.faq-title {
+    margin-top: 1rem;
+    font-size: 1.6rem;
+    color: #222;
+    text-align: center;
+}
+
 .faq-list {
     display: flex;
     flex-direction: column;
     gap: 1rem;
     width: 80%;
-    margin-top: 2rem;
+    margin-top: 1.5rem;
 }
 
 .faq-card {
@@ -37,7 +44,7 @@
 
 .faq-question {
     margin: 0;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     color: #333;
 }
 
