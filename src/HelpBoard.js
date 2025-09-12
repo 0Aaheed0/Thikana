@@ -37,14 +37,15 @@ const HelpBoard = () => {
 
   return (
     <div className="help-board-container">
-      <h1>HELP BOARD - FAQ</h1>
+      <h1>HELP BOARD</h1>
+      <h2 className="faq-title">Frequently Asked Questions (FAQ)</h2>
       <div className="faq-list">
         {faqs.map((faq, index) => {
           const isOpen = openIndexes.includes(index);
           return (
             <div key={index} className="faq-card">
               <div className="faq-header" onClick={() => toggleFAQ(index)}>
-                <h2 className="faq-question">Q: {faq.question}</h2>
+                <h3 className="faq-question">Q: {faq.question}</h3>
                 <span className="faq-icon">{isOpen ? "−" : "+"}</span>
               </div>
               {isOpen && (
