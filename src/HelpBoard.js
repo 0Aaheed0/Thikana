@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './HelpBoard.css';
 
 const HelpBoard = () => {
@@ -25,14 +25,24 @@ const HelpBoard = () => {
     }
   ];
 
+  const [openIndex, setOpenIndex] = useState(null);
+
+  const toggleFAQ = (index) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
+
   return (
     <div className="help-board-container">
       <h1>HELP BOARD - FAQ</h1>
       <div className="faq-list">
         {faqs.map((faq, index) => (
           <div key={index} className="faq-card">
-            <h2>Q: {faq.question}</h2>
-            <p><strong>A:</strong> {faq.answer}</p>
+            <h2 onClick={() => toggleFAQ(index)} className="faq-question">
+              Q: {faq.question}
+            </h2>
+            {openIndex === index && (
+              <p className="faq-answer"><strong>A:</strong> {faq.answer}</p>
+            )}
           </div>
         ))}
       </div>
