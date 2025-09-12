@@ -38,22 +38,25 @@ const HelpBoard = () => {
   return (
     <div className="help-board-container">
       <h1>HELP BOARD</h1>
-      <h2 className="faq-title">Frequently Asked Questions (FAQ)</h2>
-      <div className="faq-list">
-        {faqs.map((faq, index) => {
-          const isOpen = openIndexes.includes(index);
-          return (
-            <div key={index} className="faq-card">
-              <div className="faq-header" onClick={() => toggleFAQ(index)}>
-                <h3 className="faq-question">Q: {faq.question}</h3>
-                <span className="faq-icon">{isOpen ? "−" : "+"}</span>
+
+      <div className="faq-section">
+        <h2 className="faq-title">Frequently Asked Questions (FAQ)</h2>
+        <div className="faq-list">
+          {faqs.map((faq, index) => {
+            const isOpen = openIndexes.includes(index);
+            return (
+              <div key={index} className="faq-card">
+                <div className="faq-header" onClick={() => toggleFAQ(index)}>
+                  <h3 className="faq-question">Q: {faq.question}</h3>
+                  <span className="faq-icon">{isOpen ? "−" : "+"}</span>
+                </div>
+                {isOpen && (
+                  <p className="faq-answer"><strong>A:</strong> {faq.answer}</p>
+                )}
               </div>
-              {isOpen && (
-                <p className="faq-answer"><strong>A:</strong> {faq.answer}</p>
-              )}
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
     </div>
   );
