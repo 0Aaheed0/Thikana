@@ -4,7 +4,7 @@
     align-items: center;
     padding: 2rem;
     font-size: 1.2rem;
-    background-color: lightblue;
+    background-color: lightblue; /* page background */
 }
 
 .faq-section {
@@ -16,7 +16,7 @@
     font-size: 1.6rem;
     color: #222;
     margin-bottom: 1rem;
-    text-align: left;   /* aligned left above questions */
+    text-align: left; /* left-aligned above questions */
 }
 
 .faq-list {
@@ -26,20 +26,18 @@
     width: 100%;
 }
 
-/* Glassy FAQ card */
+/* FAQ card with solid white background */
 .faq-card {
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 12px;
     padding: 1rem;
-    background: rgba(255, 255, 255, 0.2); /* transparent white */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(10px); /* frosted glass effect */
-    -webkit-backdrop-filter: blur(10px); /* Safari support */
+    background: white; /* solid white background */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
 }
 
 .faq-card:hover {
-    background: rgba(255, 255, 255, 0.3); /* slightly stronger on hover */
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
 }
 
 .faq-header {
