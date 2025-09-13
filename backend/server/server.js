@@ -22,6 +22,14 @@ app.post("/api/signup", async (req, res) => {
   try {
     const { username, email, password } = req.body;
 
+    if (username.startsWith(" ")) {
+      return res.status(400).json({ message: "Username cannot start with a space" });
+    }
+
+    if (!email.endsWith("gmail.com")) {
+      return res.status(400).json({ message: "Email must be a gmail address" });
+    }
+
     // Check if user already exists
     const existingUser = await User.findOne({ $or: [{ email }, { username }] });
     if (existingUser) {

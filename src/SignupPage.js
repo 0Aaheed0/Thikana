@@ -44,6 +44,18 @@ function SignupPage() {
       return;
     }
 
+    if (formData.username.startsWith(" ")) {
+      setError("Username cannot start with a space");
+      setSuccess("");
+      return;
+    }
+
+    if (!formData.email.endsWith("gmail.com")) {
+      setError("Email must be a gmail address");
+      setSuccess("");
+      return;
+    }
+
     try {
       // Send signup request to backend
       const res = await axios.post(`${API_URL}/api/signup`, {
