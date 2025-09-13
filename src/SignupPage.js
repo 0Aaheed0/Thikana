@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./SignupPage.css";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import axios from "axios";
+import { useAuth } from "./AuthContext";
 
 function SignupPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -14,9 +15,10 @@ function SignupPage() {
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const { login } = useAuth();
 
   // ✅ Backend API URL
-  const API_URL = "http://localhost:5000"; // backend server
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
   const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
   const toggleConfirmPasswordVisibility = () => setShowConfirmPassword((prev) => !prev);
@@ -49,6 +51,7 @@ function SignupPage() {
         password: formData.password,
       });
 
+      login(res.data);
       setSuccess(res.data.message || "Signup successful!");
       setError("");
       setFormData({

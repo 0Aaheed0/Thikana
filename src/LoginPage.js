@@ -3,6 +3,7 @@ import './LoginPage.css';
 import ForgotPassword from './ForgotPassword';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import axios from 'axios';
+import { useAuth } from './AuthContext';
 
 function LoginPage() {
   const [showForgotPassword, setShowForgotPassword] = useState(false);
@@ -12,6 +13,7 @@ function LoginPage() {
     password: '',
   });
   const [error, setError] = useState('');
+  const { login } = useAuth();
 
   const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
@@ -31,7 +33,7 @@ function LoginPage() {
     e.preventDefault();
     try {
       const res = await axios.post(`${API_URL}/api/login`, formData);
-      localStorage.setItem('token', res.data.token);
+      login(res.data);
       window.location.href = '/';
     } catch (err) {
       console.error('Login error:', err);

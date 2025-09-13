@@ -13,22 +13,37 @@ body {
 /* Navbar */
 .navbar {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   background-color: #f8f8f8;
-  padding: 1rem;
+  padding: 1rem 2rem;
   border-bottom: 1px solid #ddd;
 }
 
-.navbar-left {
+/* Updated sections */
+.navbar-left,
+.navbar-center,
+.navbar-right {
   display: flex;
   align-items: center;
 }
 
+/* NEW center section for evenly spaced links */
+.navbar-center {
+  flex: 1;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+/* Prevent shrinking left/right */
+.navbar-left,
+.navbar-right {
+  flex-shrink: 0;
+  gap: 0.5rem;
+}
+
 .App-logo {
   height: 40px;
-  margin-right: 1rem;
-  /* Filter to make SVG blue */
+  margin-right: 0.5rem;
   filter: invert(20%) sepia(100%) saturate(2000%) hue-rotate(200deg) brightness(80%) contrast(100%);
 }
 
@@ -36,25 +51,6 @@ body {
   font-size: 1.5rem;
   margin: 0;
   color: #333;
-}
-
-.navbar-left {
-  display: flex;
-  align-items: center;
-}
-
-.navbar-right {
-  display: flex;
-  align-items: center;
-}
-
-.menu-button {
-  background-color: transparent;
-  border: none;
-  color: #333;
-  font-size: 1.5rem;
-  cursor: pointer;
-  margin-right: 2rem;
 }
 
 .account-button {
@@ -65,43 +61,7 @@ body {
   cursor: pointer;
 }
 
-.sidebar {
-  position: fixed;
-  top: 0;
-  left: -250px;
-  width: 250px;
-  height: 100%;
-  background-color: #f8f8f8;
-  padding: 1rem;
-  transition: left 0.3s ease;
-  z-index: 1000;
-}
-
-.sidebar.open {
-  left: 20px;
-}
-
-.close-sidebar-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 1.5rem;
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-}
-
-.sidebar ul {
-  list-style: none;
-  padding: 0;
-  margin-top: 2rem;
-}
-
-.sidebar li {
-  margin-bottom: 1rem;
-}
-
-.sidebar a {
+.navbar-link {
   text-decoration: none;
   color: #333;
   font-weight: bold;
@@ -109,10 +69,11 @@ body {
   align-items: center;
 }
 
-.sidebar a i {
+.navbar-link i {
   margin-right: 0.5rem;
 }
 
+/* Modal */
 .modal {
   position: fixed;
   top: 0;
@@ -165,13 +126,13 @@ body {
 
 /* Hero Section */
 .hero {
-  background-image: url('https://images.unsplash.com/photo-1599152097274-5da4c5979b9b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8cm9hZCUyMGFjY2lkZW50fGVufDB8fDB8fHww');
+  background-image: url('https://images.unsplash.com/photo-1599152097274-5da4c5979b9b?w=1200&auto=format&fit=crop&q=80');
   background-size: cover;
   background-position: center;
   color: white;
   padding: 4rem 2rem;
   text-align: center;
-  min-height: 400px; /* Ensure enough height */
+  min-height: 400px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -180,7 +141,7 @@ body {
 .hero-content {
   max-width: 800px;
   margin: 0 auto;
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background for readability */
+  background-color: rgba(0, 0, 0, 0.55);
   padding: 2rem;
   border-radius: 10px;
 }
@@ -232,7 +193,7 @@ body {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin: 1rem;
   flex: 1;
-  min-width: 200px; /* Ensure items don't get too small */
+  min-width: 200px;
 }
 
 .statistic-item h3 {
@@ -266,8 +227,9 @@ body {
   font-size: 0.9rem;
 }
 
+/* Hover Effects */
 .navbar-title:hover,
-.sidebar a:hover,
+.navbar-link:hover,
 .welcome-text:hover,
 .description-text:hover,
 .report-button:hover,
