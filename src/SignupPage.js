@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import "./SignupPage.css";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import axios from "axios";
-import { useAuth } from "./AuthContext";
 
 function SignupPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -15,22 +14,24 @@ function SignupPage() {
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const { login } = useAuth();
 
-  // ✅ Backend API URL
-  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+  // ✅ Backend API URL from .env or fallback
+  const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
+  // Toggle password visibility
   const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
   const toggleConfirmPasswordVisibility = () => setShowConfirmPassword((prev) => !prev);
 
+  // Handle form input change
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // ✅ Frontend validation
+    // Frontend validation
     if (!formData.username || !formData.email || !formData.password || !formData.confirmPassword) {
       setError("All fields are required");
       setSuccess("");
@@ -44,14 +45,14 @@ function SignupPage() {
     }
 
     try {
-      // ✅ Call backend API
+      // Send signup request to backend
       const res = await axios.post(`${API_URL}/api/signup`, {
         username: formData.username,
         email: formData.email,
         password: formData.password,
       });
 
-      login(res.data);
+      // Show success and reset form
       setSuccess(res.data.message || "Signup successful!");
       setError("");
       setFormData({
@@ -61,9 +62,9 @@ function SignupPage() {
         confirmPassword: "",
       });
 
-      // Redirect after success
+      // Redirect to login page after delay
       setTimeout(() => {
-        window.location.href = "/";
+        window.location.href = "/login";
       }, 2000);
     } catch (err) {
       console.error("Signup error:", err);
@@ -84,10 +85,13 @@ function SignupPage() {
     <div className="signup-page">
       <div className="signup-container">
         <h2>Sign Up</h2>
+
         <form onSubmit={handleSubmit}>
+          {/* Error and Success Messages */}
           {error && <p className="error">{error}</p>}
           {success && <p className="success">{success}</p>}
 
+          {/* Username */}
           <div className="input-group">
             <label htmlFor="username">Username</label>
             <input
@@ -100,6 +104,7 @@ function SignupPage() {
             />
           </div>
 
+          {/* Email */}
           <div className="input-group">
             <label htmlFor="email">Email</label>
             <input
@@ -112,6 +117,7 @@ function SignupPage() {
             />
           </div>
 
+          {/* Password */}
           <div className="input-group">
             <label htmlFor="password">Password</label>
             <div className="password-wrapper">
@@ -123,12 +129,17 @@ function SignupPage() {
                 onChange={handleChange}
                 required
               />
-              <button type="button" onClick={togglePasswordVisibility} className="toggle-password">
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="toggle-password"
+              >
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </button>
             </div>
           </div>
 
+          {/* Confirm Password */}
           <div className="input-group">
             <label htmlFor="confirm-password">Confirm Password</label>
             <div className="password-wrapper">
@@ -150,6 +161,7 @@ function SignupPage() {
             </div>
           </div>
 
+          {/* Submit Button */}
           <button type="submit" className="signup-button">
             Sign Up
           </button>
