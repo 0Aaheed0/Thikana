@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import './App.css';
 import logo from './logo.svg';
+import { useAuth } from './AuthContext';
 
 import ArticleSlider from './ArticleSlider';
 import DataSpecialists from './DataSpecialists';
@@ -11,76 +12,70 @@ import SignupPage from './SignupPage';
 import CaseArchive from './CaseArchive';
 import HelpBoard from './HelpBoard';
 
-function HomePage() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
-
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
-  };
+// Account Info Component
+function AccountInfo() {
+  const { user, logout } = useAuth();
 
   return (
-    <div className="App">
-      <nav className="navbar">
-        <div className="navbar-left">
-          <button className="menu-button" onClick={toggleSidebar}>
-            <i className="fas fa-bars"></i>
-          </button>
-          <img src={logo} className="App-logo" alt="Thikana Logo" />
-          <h1 className="navbar-title">THIKANA</h1>
-        </div>
-        <div className="navbar-right">
-          <button className="account-button" onClick={toggleModal}>
-            <i className="fas fa-user-circle"></i>
-          </button>
-        </div>
-      </nav>
+    <div className="account-info">
+      <p>Logged in as {user.username}</p>
+      <button onClick={logout}>Logout</button>
+    </div>
+  );
+}
 
-      {/* Sidebar */}
-      <div className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
-        <ul>
-          {isSidebarOpen && (
-            <button className="close-sidebar-button" onClick={toggleSidebar}>
-              &times;
-            </button>
-          )}
-          <li>
-            <a href="#home"><i className="fas fa-home"></i> Home</a>
-          </li>
-          <li>
-            <Link to="/case-archive" onClick={toggleSidebar}>
-              <i className="fas fa-archive"></i> Case Archive
-            </Link>
-          </li>
-          <li>
-            <a href="#report-missing"><i className="fas fa-user-slash"></i> Report Missing</a>
-          </li>
-          <li>
-            <a href="#report-accident"><i className="fas fa-car-crash"></i> Report Accident</a>
-          </li>
-          <li>
-            <Link to="/help-board" onClick={toggleSidebar}>
-              <i className="fas fa-hands-helping"></i> Help Board
-            </Link>
-          </li>
-          <li>
-            <Link to="/login" onClick={toggleSidebar}>
-              <i className="fas fa-sign-in-alt"></i> Login
-            </Link>
-          </li>
-          <li>
-            <Link to="/signup" onClick={toggleSidebar}>
-              <i className="fas fa-user-plus"></i> Sign Up
-            </Link>
-          </li>
-        </ul>
+// Navbar Component
+function Navbar() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAccountInfoOpen, setIsAccountInfoOpen] = useState(false);
+  const { user } = useAuth();
+
+  const toggleModal = () => setIsModalOpen(!isModalOpen);
+  const toggleAccountInfo = () => setIsAccountInfoOpen(!isAccountInfoOpen);
+
+  return (
+    <nav className="navbar">
+      <div className="navbar-left">
+        <img src={logo} className="App-logo" alt="Thikana Logo" />
+        <h1 className="navbar-title">THIKANA</h1>
       </div>
 
-      {/* Modal */}
+      {/* ✅ NEW: center container for nav links */}
+      <div className="navbar-center">
+        <Link to="/" className="navbar-link">
+          <i className="fas fa-home"></i> Home
+        </Link>
+        <Link to="/case-archive" className="navbar-link">
+          <i className="fas fa-archive"></i> Case Archive
+        </Link>
+        <a href="#report-missing" className="navbar-link">
+          <i className="fas fa-user-slash"></i> Report Missing
+        </a>
+        <a href="#report-accident" className="navbar-link">
+          <i className="fas fa-car-crash"></i> Report Accident
+        </a>
+        <Link to="/help-board" className="navbar-link">
+          <i className="fas fa-hands-helping"></i> Help Board
+        </Link>
+      </div>
+
+      <div className="navbar-right">
+        {user ? (
+          <div className="account-menu">
+            <button className="account-button" onClick={toggleAccountInfo}>
+              <i className="fas fa-user-circle"></i>
+            </button>
+            {isAccountInfoOpen && <AccountInfo />}
+          </div>
+        ) : (
+          <div className="account-menu">
+            <button className="account-button" onClick={toggleModal}>
+              <i className="fas fa-user-plus"></i>
+            </button>
+          </div>
+        )}
+      </div>
+
       {isModalOpen && (
         <div className="modal">
           <div className="modal-content">
@@ -98,8 +93,13 @@ function HomePage() {
           </div>
         </div>
       )}
+    </nav>
+  );
+}
 
-      {/* Hero */}
+function HomePage() {
+  return (
+    <div className="App">
       <header className="hero">
         <div className="hero-content">
           <h2 className="welcome-text">Welcome to THIKANA</h2>
@@ -115,7 +115,6 @@ function HomePage() {
 
       <ArticleSlider />
 
-      {/* Stats */}
       <section className="statistics-section">
         <div className="statistic-item">
           <Link to="/case-archive">
@@ -169,13 +168,14 @@ function HomePage() {
 function App() {
   return (
     <Router>
+      <Navbar />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/case-archive" element={<CaseArchive />} />
         <Route path="/case-archive/:caseType" element={<CaseArchive />} />
-        <Route path="/help-board" element={<HelpBoard />} /> {/* ✅ Fixed */}
+        <Route path="/help-board" element={<HelpBoard />} />
       </Routes>
     </Router>
   );
