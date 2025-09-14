@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./SignupPage.css";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import axios from "axios";
@@ -14,6 +15,7 @@ function SignupPage() {
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const navigate = useNavigate();
 
   // ✅ Backend API URL from .env or fallback
   const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
@@ -74,10 +76,8 @@ function SignupPage() {
         confirmPassword: "",
       });
 
-      // Redirect to login page after delay
-      setTimeout(() => {
-        window.location.href = "/login";
-      }, 2000);
+      // Redirect to home page
+      navigate("/");
     } catch (err) {
       console.error("Signup error:", err);
 
