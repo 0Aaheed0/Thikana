@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './LoginPage.css';
 import ForgotPassword from './ForgotPassword';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
@@ -14,6 +15,7 @@ function LoginPage() {
   });
   const [error, setError] = useState('');
   const { login } = useAuth();
+  const navigate = useNavigate();
 
   const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
@@ -34,7 +36,7 @@ function LoginPage() {
     try {
       const res = await axios.post(`${API_URL}/api/login`, formData);
       login(res.data);
-      window.location.href = '/';
+      navigate('/');
     } catch (err) {
       console.error('Login error:', err);
       if (err.response) {
