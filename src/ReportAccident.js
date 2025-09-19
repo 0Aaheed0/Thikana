@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './ReportAccident.css';
 
 const ReportAccident = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
     age: '',
@@ -10,6 +12,7 @@ const ReportAccident = () => {
     injuryType: '',
     description: '',
   });
+  const [submissionStatus, setSubmissionStatus] = useState(null); // 'success' or 'error'
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -19,16 +22,43 @@ const ReportAccident = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission logic here
-    console.log(formData);
+    setSubmissionStatus(null); // Clear previous status
+    try {
+      const response = await fetch('http://localhost:5000/api/report-accident', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      if (response.ok) {
+        setSubmissionStatus('success');
+        setTimeout(() => {
+          navigate('/'); // Redirect to homepage
+        }, 2000); // Redirect after 2 seconds
+      } else {
+        setSubmissionStatus('error');
+      }
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.error('Error submitting report:', error);
+      setSubmissionStatus('error');
+    }
   };
 
   return (
     <div className="report-accident-container">
       <h2>Report Accident</h2>
       <form onSubmit={handleSubmit} className="report-accident-form">
+        {submissionStatus === 'success' && (
+          <p className="submission-success">Submission successful! Redirecting to homepage...</p>
+        )}
+        {submissionStatus === 'error' && (
+          <p className="submission-error">Error submitting report. Please try again.</p>
+        )}
         <label>
           Name:
           <input
