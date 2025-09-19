@@ -11,6 +11,8 @@ import LoginPage from './LoginPage';
 import SignupPage from './SignupPage';
 import CaseArchive from './CaseArchive';
 import HelpBoard from './HelpBoard';
+import ReportMissing from './ReportMissing';
+import ReportAccident from './ReportAccident';
 
 // Account Info Component
 function AccountInfo() {
@@ -48,12 +50,12 @@ function Navbar() {
         <Link to="/case-archive" className="navbar-link">
           <i className="fas fa-archive"></i> Case Archive
         </Link>
-        <a href="#report-missing" className="navbar-link">
+        <Link to="/report-missing" className="navbar-link">
           <i className="fas fa-user-slash"></i> Report Missing
-        </a>
-        <a href="#report-accident" className="navbar-link">
+        </Link>
+        <Link to="/report-accident" className="navbar-link">
           <i className="fas fa-car-crash"></i> Report Accident
-        </a>
+        </Link>
         <Link to="/help-board" className="navbar-link">
           <i className="fas fa-hands-helping"></i> Help Board
         </Link>
@@ -176,6 +178,8 @@ function App() {
         <Route path="/case-archive" element={<CaseArchive />} />
         <Route path="/case-archive/:caseType" element={<CaseArchive />} />
         <Route path="/help-board" element={<HelpBoard />} />
+        <Route path="/report-missing" element={<ReportMissing />} />
+        <Route path="/report-accident" element={<ReportAccident />} />
       </Routes>
     </Router>
   );
