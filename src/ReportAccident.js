@@ -24,7 +24,7 @@ const ReportAccident = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmissionStatus(null); // Clear previous status
+
     try {
       const response = await fetch('http://localhost:5000/api/report-accident', {
         method: 'POST',
@@ -34,18 +34,16 @@ const ReportAccident = () => {
         body: JSON.stringify(formData),
       });
       if (response.ok) {
-        setSubmissionStatus('success');
-        setTimeout(() => {
-          navigate('/'); // Redirect to homepage
-        }, 2000); // Redirect after 2 seconds
+
+        alert('Accident report submitted successfully!');
+        // You might want to redirect the user to another page
       } else {
-        setSubmissionStatus('error');
+        alert('Failed to submit accident report.');
       }
-      const data = await response.json();
-      console.log(data);
     } catch (error) {
-      console.error('Error submitting report:', error);
-      setSubmissionStatus('error');
+      console.error('Error submitting accident report:', error);
+      alert('An error occurred while submitting the accident report.');
+
     }
   };
 

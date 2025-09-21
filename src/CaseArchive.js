@@ -1,81 +1,54 @@
+
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import './CaseArchive.css';
 
 const CaseArchive = () => {
-  const { caseType } = useParams();
-  const [cases, setCases] = useState([]);
-  const [search, setSearch] = useState("");
-  const [filterType, setFilterType] = useState("");
-  const [filterStatus, setFilterStatus] = useState("");
-  const [dateFrom, setDateFrom] = useState("");
-  const [dateTo, setDateTo] = useState("");
+    const { caseType } = useParams();
+    const [cases, setCases] = useState([]);
+    const [search, setSearch] = useState("");
+    const [filterType, setFilterType] = useState("");
+    const [filterStatus, setFilterStatus] = useState("");
+    const [dateFrom, setDateFrom] = useState("");
+    const [dateTo, setDateTo] = useState("");
 
-  useEffect(() => {
-    const fetchCases = async () => {
-      try {
-        const [missingPersonsRes, accidentsRes, articlesRes] = await Promise.all([
-          fetch('http://localhost:5000/api/missing-persons'),
-          fetch('http://localhost:5000/api/accidents'),
-          fetch('http://localhost:5000/api/articles'),
-        ]);
-        const missingPersons = await missingPersonsRes.json();
-        const accidents = await accidentsRes.json();
-        const articles = await articlesRes.json();
+    useEffect(() => {
+        const fetchCases = async () => {
+            try {
+                const response = await fetch('http://localhost:5000/api/cases');
+                const data = await response.json();
+                setCases(data);
+            } catch (error) {
+                console.error('Error fetching cases:', error);
+            }
+        };
+        fetchCases();
+    }, []);
 
-        const allCases = [
-          ...missingPersons.map(c => ({
-            ...c,
-            caseType: 'missing',
-            name: c.name,
-            description: c.description,
-            // ✅ prepend backend URL so <img> works
-            photo: c.photo ? `http://localhost:5000${c.photo}` : null,
-            createdAt: c.createdAt
-          })),
-          ...accidents.map(c => ({
-            ...c,
-            caseType: 'accident',
-            name: c.name,
-            description: c.description,
-            photo: null,
-            createdAt: c.createdAt
-          })),
-          ...articles.map(a => ({
-            ...a,
-            caseType: a.caseType,
-            name: a.title,
-            description: a.shortDescription,
-            photo: a.image,
-            createdAt: new Date().toISOString()
-          }))
-        ];
-        setCases(allCases);
-      } catch (error) {
-        console.error("Error fetching cases:", error);
-      }
-    };
-    fetchCases();
-  }, []);
+    const statusOptions = ["", "open", "resolved", "closed"];
+    const typeOptions = ["", "missing", "road-accident", "complaint", "request", "application"];
 
-  const filteredCases = cases.filter(caseItem => {
-    if (caseType && caseItem.caseType !== caseType) return false;
-    if (filterType && caseItem.caseType !== filterType) return false;
-    if (search) {
-      const searchLower = search.toLowerCase();
-      if (!(
-        caseItem.name.toLowerCase().includes(searchLower) ||
-        (caseItem._id && caseItem._id.toString().includes(searchLower)) ||
-        (caseItem.location && caseItem.location.toLowerCase().includes(searchLower)) ||
-        (caseItem.lastSeenLocation && caseItem.lastSeenLocation.toLowerCase().includes(searchLower)) ||
-        (caseItem.description && caseItem.description.toLowerCase().includes(searchLower))
-      )) return false;
-    }
-    if (filterStatus && caseItem.status !== filterStatus) return false;
-    if (dateFrom && caseItem.createdAt && new Date(caseItem.createdAt) < new Date(dateFrom)) return false;
-    if (dateTo && caseItem.createdAt && new Date(caseItem.createdAt) > new Date(dateTo)) return false;
-    return true;
-  });
+    const filteredCases = cases.filter(caseItem => {
+        if (caseType && caseItem.caseType !== caseType) return false;
+        if (filterType && caseItem.caseType !== filterType) return false;
+        if (search) {
+            const searchLower = search.toLowerCase();
+            if (!(
+                caseItem.name.toLowerCase().includes(searchLower) ||
+                (caseItem._id && caseItem._id.toString().includes(searchLower)) ||
+                (caseItem.description && caseItem.description.toLowerCase().includes(searchLower)) ||
+                (caseItem.lastSeenLocation && caseItem.lastSeenLocation.toLowerCase().includes(searchLower)) ||
+                (caseItem.location && caseItem.location.toLowerCase().includes(searchLower))
+            )) return false;
+        }
+        if (filterStatus && caseItem.status !== filterStatus) return false;
+        if (dateFrom && new Date(caseItem.dateSubmitted) < new Date(dateFrom)) return false;
+        if (dateTo && new Date(caseItem.dateSubmitted) > new Date(dateTo)) return false;
+        return true;
+    });
+
+    const pageTitle = caseType ? `${caseType.replace('-', ' ')} Cases` : 'All Cases';
+    const breadcrumbCategory = caseType ? caseType.replace('-', ' ') : 'Archive';
 
   const pageTitle = caseType ? `${caseType.replace('-', ' ')} Cases` : 'All Cases';
   const breadcrumbCategory = caseType ? caseType.replace('-', ' ') : 'Archive';
@@ -122,14 +95,19 @@ const CaseArchive = () => {
           <input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} />
         </label>
       </div>
+            <div className="case-list">
+                {filteredCases.length > 0 ? (
+                    filteredCases.map(caseItem => (
+                        <div key={caseItem._id} className="case-item">
+                            <img src={`http://localhost:5000/${caseItem.photo}`} alt={caseItem.name} />
+                            <h2>{caseItem.name}</h2>
+                            <p>{caseItem.description}</p>
+                        </div>
+                    ))
+                ) : (
+                    <p>No cases found for this filter.</p>
+                )}
 
-      <div className="case-list">
-        {filteredCases.length > 0 ? (
-          filteredCases.map(caseItem => (
-            <div key={caseItem._id || caseItem.id} className="case-item">
-              {caseItem.photo && <img src={caseItem.photo} alt={caseItem.name} />}
-              <h2>{caseItem.name}</h2>
-              <p>{caseItem.description}</p>
             </div>
           ))
         ) : (

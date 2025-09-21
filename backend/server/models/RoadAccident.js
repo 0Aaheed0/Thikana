@@ -1,7 +1,6 @@
-
 import mongoose from 'mongoose';
 
-const MissingPersonSchema = new mongoose.Schema({
+const RoadAccidentSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -14,7 +13,11 @@ const MissingPersonSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  lastSeenLocation: {
+  location: {
+    type: String,
+    required: true,
+  },
+  injuryType: {
     type: String,
     required: true,
   },
@@ -22,12 +25,9 @@ const MissingPersonSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  photo: {
-    type: String, // Or Buffer, depending on how you handle file uploads
-  },
   caseType: {
     type: String,
-    default: 'missing',
+    default: 'road-accident',
   },
   status: {
     type: String,
@@ -39,6 +39,6 @@ const MissingPersonSchema = new mongoose.Schema({
   },
 });
 
-const MissingPerson = mongoose.model('MissingPerson', MissingPersonSchema);
+const RoadAccident = mongoose.model('RoadAccident', RoadAccidentSchema);
 
-export default MissingPerson;
+export default RoadAccident;

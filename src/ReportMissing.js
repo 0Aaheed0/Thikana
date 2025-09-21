@@ -1,6 +1,8 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import "./ReportMissing.css";
+
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import './ReportMissing.css';
+
 
 const ReportMissing = () => {
   const navigate = useNavigate();
@@ -12,7 +14,9 @@ const ReportMissing = () => {
     description: "",
     photo: null,
   });
-  const [status, setStatus] = useState(null); // success | error
+
+  const navigate = useNavigate();
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,30 +29,31 @@ const ReportMissing = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setStatus(null);
 
     try {
       const data = new FormData();
-      Object.keys(formData).forEach((key) => {
-        if (formData[key]) {
-          data.append(key, formData[key]);
-        }
+      data.append('name', formData.name);
+      data.append('age', formData.age);
+      data.append('gender', formData.gender);
+      data.append('lastSeenLocation', formData.lastSeenLocation);
+      data.append('description', formData.description);
+      data.append('photo', formData.photo);
+
+      const response = await fetch('http://localhost:5000/api/report-missing', {
+        method: 'POST',
+        body: data,
       });
 
-      const res = await fetch("http://localhost:5000/api/report-missing", {
-        method: "POST",
-        body: data, // ✅ don't set headers manually
-      });
-
-      if (res.ok) {
-        setStatus("success");
-        setTimeout(() => navigate("/"), 2000);
+      if (response.ok) {
+        alert('Report submitted successfully!');
+        navigate('/');
       } else {
-        setStatus("error");
+        alert('Failed to submit report.');
       }
-    } catch (err) {
-      console.error("Error submitting report:", err);
-      setStatus("error");
+    } catch (error) {
+      console.error('Error submitting report:', error);
+      alert('An error occurred while submitting the report.');
+
     }
   };
 
