@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import './ReportAccident.css';
 
 const ReportAccident = () => {
-  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
     age: '',
@@ -12,38 +10,38 @@ const ReportAccident = () => {
     injuryType: '',
     description: '',
   });
-  const [submissionStatus, setSubmissionStatus] = useState(null); // 'success' or 'error'
+  const [submissionStatus, setSubmissionStatus] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       const response = await fetch('http://localhost:5000/api/report-accident', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
-      if (response.ok) {
 
-        alert('Accident report submitted successfully!');
-        // You might want to redirect the user to another page
+      if (response.ok) {
+        setSubmissionStatus('success');
+        setFormData({
+          name: '',
+          age: '',
+          gender: '',
+          location: '',
+          injuryType: '',
+          description: '',
+        });
       } else {
-        alert('Failed to submit accident report.');
+        setSubmissionStatus('error');
       }
     } catch (error) {
       console.error('Error submitting accident report:', error);
-      alert('An error occurred while submitting the accident report.');
-
+      setSubmissionStatus('error');
     }
   };
 
@@ -52,68 +50,40 @@ const ReportAccident = () => {
       <h2>Report Accident</h2>
       <form onSubmit={handleSubmit} className="report-accident-form">
         {submissionStatus === 'success' && (
-          <p className="submission-success">Submission successful! Redirecting to homepage...</p>
+          <p className="submission-success">✅ Submission successful!</p>
         )}
         {submissionStatus === 'error' && (
-          <p className="submission-error">Error submitting report. Please try again.</p>
+          <p className="submission-error">❌ Error submitting report. Please try again.</p>
         )}
+
         <label>
           Name:
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-          />
+          <input type="text" name="name" value={formData.name} onChange={handleChange} required />
         </label>
         <label>
           Age:
-          <input
-            type="number"
-            name="age"
-            value={formData.age}
-            onChange={handleChange}
-            required
-          />
+          <input type="number" name="age" value={formData.age} onChange={handleChange} required />
         </label>
         <label>
           Gender:
           <select name="gender" value={formData.gender} onChange={handleChange} required>
             <option value="">Select Gender</option>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-            <option value="other">Other</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
           </select>
         </label>
         <label>
           Location:
-          <input
-            type="text"
-            name="location"
-            value={formData.location}
-            onChange={handleChange}
-            required
-          />
+          <input type="text" name="location" value={formData.location} onChange={handleChange} required />
         </label>
         <label>
           Injury Type:
-          <input
-            type="text"
-            name="injuryType"
-            value={formData.injuryType}
-            onChange={handleChange}
-            required
-          />
+          <input type="text" name="injuryType" value={formData.injuryType} onChange={handleChange} required />
         </label>
         <label>
           Description:
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            required
-          />
+          <textarea name="description" value={formData.description} onChange={handleChange} required />
         </label>
         <button type="submit">Submit Report</button>
       </form>

@@ -9,6 +9,7 @@ import path from "path";
 
 import User from "./models/User.js";
 import Report from "./models/Report.js";
+import RoadAccident from "./models/RoadAccident.js";
 
 dotenv.config();
 
@@ -27,9 +28,6 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// Serve uploaded files
-app.use("/uploads", express.static("uploads"));
-
 // Connect to MongoDB
 mongoose
   .connect(process.env.MONGO_URI)
@@ -37,28 +35,21 @@ mongoose
   .catch((err) => console.error("❌ MongoDB connection error:", err));
 
 /* ---------- Auth Routes ---------- */
-
 app.post("/api/signup", async (req, res) => {
   try {
     const { username, email, password } = req.body;
 
     if (username.startsWith(" ")) {
-      return res
-        .status(400)
-        .json({ message: "Username cannot start with a space" });
+      return res.status(400).json({ message: "Username cannot start with a space" });
     }
 
     if (!email.endsWith("gmail.com")) {
-      return res
-        .status(400)
-        .json({ message: "Email must be a gmail address" });
+      return res.status(400).json({ message: "Email must be a gmail address" });
     }
 
     const existingUser = await User.findOne({ $or: [{ email }, { username }] });
     if (existingUser) {
-      return res
-        .status(400)
-        .json({ message: "Username or email already exists" });
+      return res.status(400).json({ message: "Username or email already exists" });
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -69,9 +60,7 @@ app.post("/api/signup", async (req, res) => {
 
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
-    res
-      .status(201)
-      .json({ token, user: { id: newUser._id, username: newUser.username } });
+    res.status(201).json({ token, user: { id: newUser._id, username: newUser.username } });
   } catch (error) {
     console.error("Signup error:", error);
     res.status(500).json({ message: "Internal server error" });
@@ -86,14 +75,11 @@ app.post("/api/login", async (req, res) => {
     if (!user) return res.status(400).json({ message: "Invalid credentials" });
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch)
-      return res.status(400).json({ message: "Invalid credentials" });
+    if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
-    res
-      .status(200)
-      .json({ token, user: { id: user._id, username: user.username } });
+    res.status(200).json({ token, user: { id: user._id, username: user.username } });
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
   }
@@ -101,7 +87,7 @@ app.post("/api/login", async (req, res) => {
 
 /* ---------- Report Routes ---------- */
 
-// Create a new report
+// Missing person report
 app.post("/api/report-missing", upload.single("photo"), async (req, res) => {
   try {
     const { name, age, gender, lastSeenLocation, description } = req.body;
@@ -123,11 +109,36 @@ app.post("/api/report-missing", upload.single("photo"), async (req, res) => {
   }
 });
 
+// Accident report
+app.post('/api/report-accident', async (req, res) => {
+  try {
+    const { name, age, gender, location, injuryType, description } = req.body;
+    const newRoadAccident = new RoadAccident({
+      name,
+      age,
+      gender,
+      location,
+      injuryType,
+      description,
+    });
+    await newRoadAccident.save();
+    res.status(201).json({ message: 'Road accident report submitted successfully', report: newRoadAccident });
+  } catch (error) {
+    console.error('Error submitting road accident report:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 // Get all reports
 app.get("/api/reports", async (req, res) => {
   try {
-    const reports = await Report.find().sort({ dateSubmitted: -1 });
-    res.json(reports);
+    const missingReports = await Report.find().lean();
+    const accidentReports = await RoadAccident.find().lean();
+
+    const allReports = [...missingReports, ...accidentReports];
+    allReports.sort((a, b) => b.dateSubmitted - a.dateSubmitted);
+
+    res.json(allReports);
   } catch (error) {
     res.status(500).json({ message: "Failed to fetch reports" });
   }
