@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './ReportAccident.css';
 
 const ReportAccident = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
     age: '',
@@ -10,6 +12,7 @@ const ReportAccident = () => {
     injuryType: '',
     description: '',
   });
+  const [submissionStatus, setSubmissionStatus] = useState(null); // 'success' or 'error'
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,6 +24,7 @@ const ReportAccident = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
       const response = await fetch('http://localhost:5000/api/report-accident', {
         method: 'POST',
@@ -30,6 +34,7 @@ const ReportAccident = () => {
         body: JSON.stringify(formData),
       });
       if (response.ok) {
+
         alert('Accident report submitted successfully!');
         // You might want to redirect the user to another page
       } else {
@@ -38,6 +43,7 @@ const ReportAccident = () => {
     } catch (error) {
       console.error('Error submitting accident report:', error);
       alert('An error occurred while submitting the accident report.');
+
     }
   };
 
@@ -45,6 +51,12 @@ const ReportAccident = () => {
     <div className="report-accident-container">
       <h2>Report Accident</h2>
       <form onSubmit={handleSubmit} className="report-accident-form">
+        {submissionStatus === 'success' && (
+          <p className="submission-success">Submission successful! Redirecting to homepage...</p>
+        )}
+        {submissionStatus === 'error' && (
+          <p className="submission-error">Error submitting report. Please try again.</p>
+        )}
         <label>
           Name:
           <input
