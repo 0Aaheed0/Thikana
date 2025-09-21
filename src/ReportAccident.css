@@ -1,40 +1,87 @@
+/* Report Accident Page - Modern & User-Friendly Style */
 .report-accident-container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 40px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0e0e0;
+}
+
+.report-accident-container h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+  color: #333;
+  font-weight: 600;
+}
+
+.report-accident-form {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 25px;
+}
+
+.report-accident-form label {
+  font-weight: 500;
+  color: #555;
+  font-size: 1.1rem;
+}
+
+.report-accident-form input,
+.report-accident-form select,
+.report-accident-form textarea {
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.report-accident-form input:focus,
+.report-accident-form select:focus,
+.report-accident-form textarea:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+  outline: none;
+}
+
+.report-accident-form button {
+  background: linear-gradient(90deg, #007bff, #0056b3);
+  color: white;
+  padding: 15px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: 600;
+  transition: background 0.3s, transform 0.2s;
+  margin-top: 15px;
+}
+
+.report-accident-form button:hover {
+  background: linear-gradient(90deg, #0056b3, #003d80);
+  transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .report-accident-container {
+    padding: 25px;
   }
-  
-  .report-accident-form {
-    display: flex;
-    flex-direction: column;
+
+  .report-accident-container h2 {
+    font-size: 2rem;
   }
-  
-  .report-accident-form label {
-    margin-bottom: 10px;
-  }
-  
+
   .report-accident-form input,
   .report-accident-form select,
-  .report-accident-form textarea {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
+  .report-accident-form textarea,
   .report-accident-form button {
-    background-color: #4caf50;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-top: 10px;
+    padding: 12px;
+    font-size: 1rem;
   }
-  
-  .report-accident-form button:hover {
-    background-color: #45a049;
-  }
+}
   

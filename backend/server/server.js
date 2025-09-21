@@ -15,6 +15,17 @@ dotenv.config();
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use('/uploads', express.static(path.resolve('uploads')));
+
+// ✅ Multer config
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, "uploads/"),
+  filename: (req, file, cb) => {
+    const uniqueName = Date.now() + "-" + file.originalname;
+    cb(null, uniqueName);
+  },
+});
+const upload = multer({ storage });
 
 // Serve uploaded files
 app.use("/uploads", express.static("uploads"));
@@ -32,16 +43,22 @@ app.post("/api/signup", async (req, res) => {
     const { username, email, password } = req.body;
 
     if (username.startsWith(" ")) {
-      return res.status(400).json({ message: "Username cannot start with a space" });
+      return res
+        .status(400)
+        .json({ message: "Username cannot start with a space" });
     }
 
     if (!email.endsWith("gmail.com")) {
-      return res.status(400).json({ message: "Email must be a gmail address" });
+      return res
+        .status(400)
+        .json({ message: "Email must be a gmail address" });
     }
 
     const existingUser = await User.findOne({ $or: [{ email }, { username }] });
     if (existingUser) {
-      return res.status(400).json({ message: "Username or email already exists" });
+      return res
+        .status(400)
+        .json({ message: "Username or email already exists" });
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -52,7 +69,9 @@ app.post("/api/signup", async (req, res) => {
 
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
-    res.status(201).json({ token, user: { id: newUser._id, username: newUser.username } });
+    res
+      .status(201)
+      .json({ token, user: { id: newUser._id, username: newUser.username } });
   } catch (error) {
     console.error("Signup error:", error);
     res.status(500).json({ message: "Internal server error" });
@@ -64,36 +83,23 @@ app.post("/api/login", async (req, res) => {
     const { username, password } = req.body;
 
     const user = await User.findOne({ username });
-    if (!user) {
-      return res.status(400).json({ message: "Invalid credentials" });
-    }
+    if (!user) return res.status(400).json({ message: "Invalid credentials" });
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
+    if (!isMatch)
       return res.status(400).json({ message: "Invalid credentials" });
-    }
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
-    res.status(200).json({ token, user: { id: user._id, username: user.username } });
+    res
+      .status(200)
+      .json({ token, user: { id: user._id, username: user.username } });
   } catch (error) {
-    console.error("Login error:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 });
 
 /* ---------- Report Routes ---------- */
-
-// Multer setup
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
-  }
-});
-const upload = multer({ storage });
 
 // Create a new report
 app.post("/api/report-missing", upload.single("photo"), async (req, res) => {
