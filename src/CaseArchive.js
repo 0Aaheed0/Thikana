@@ -1,54 +1,40 @@
-
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import './CaseArchive.css';
 
 const CaseArchive = () => {
-    const { caseType } = useParams();
-    const [cases, setCases] = useState([]);
-    const [search, setSearch] = useState("");
-    const [filterType, setFilterType] = useState("");
-    const [filterStatus, setFilterStatus] = useState("");
-    const [dateFrom, setDateFrom] = useState("");
-    const [dateTo, setDateTo] = useState("");
+  const { caseType } = useParams();
+  const [cases, setCases] = useState([]);
+  const [search, setSearch] = useState("");
+  const [filterType, setFilterType] = useState("");
+  const [filterStatus, setFilterStatus] = useState("");
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
 
-    useEffect(() => {
-        const fetchCases = async () => {
-            try {
-                const response = await fetch('http://localhost:5000/api/cases');
-                const data = await response.json();
-                setCases(data);
-            } catch (error) {
-                console.error('Error fetching cases:', error);
-            }
-        };
-        fetchCases();
-    }, []);
+  const statusOptions = ["", "open", "resolved", "closed"];
+  const typeOptions = ["", "missing", "road-accident", "complaint", "request", "application"];
 
-    const statusOptions = ["", "open", "resolved", "closed"];
-    const typeOptions = ["", "missing", "road-accident", "complaint", "request", "application"];
+  useEffect(() => {
+    fetch("http://localhost:5000/api/reports")
+      .then(res => res.json())
+      .then(data => setCases(data))
+      .catch(err => console.error("Error fetching cases:", err));
+  }, []);
 
-    const filteredCases = cases.filter(caseItem => {
-        if (caseType && caseItem.caseType !== caseType) return false;
-        if (filterType && caseItem.caseType !== filterType) return false;
-        if (search) {
-            const searchLower = search.toLowerCase();
-            if (!(
-                caseItem.name.toLowerCase().includes(searchLower) ||
-                (caseItem._id && caseItem._id.toString().includes(searchLower)) ||
-                (caseItem.description && caseItem.description.toLowerCase().includes(searchLower)) ||
-                (caseItem.lastSeenLocation && caseItem.lastSeenLocation.toLowerCase().includes(searchLower)) ||
-                (caseItem.location && caseItem.location.toLowerCase().includes(searchLower))
-            )) return false;
-        }
-        if (filterStatus && caseItem.status !== filterStatus) return false;
-        if (dateFrom && new Date(caseItem.dateSubmitted) < new Date(dateFrom)) return false;
-        if (dateTo && new Date(caseItem.dateSubmitted) > new Date(dateTo)) return false;
-        return true;
-    });
-
-    const pageTitle = caseType ? `${caseType.replace('-', ' ')} Cases` : 'All Cases';
-    const breadcrumbCategory = caseType ? caseType.replace('-', ' ') : 'Archive';
+  const filteredCases = cases.filter(c => {
+    if (caseType && c.caseType !== caseType) return false;
+    if (filterType && c.caseType !== filterType) return false;
+    if (search) {
+      const s = search.toLowerCase();
+      if (!(c.name.toLowerCase().includes(s) || c.lastSeenLocation.toLowerCase().includes(s))) {
+        return false;
+      }
+    }
+    if (filterStatus && c.status !== filterStatus) return false;
+    if (dateFrom && new Date(c.dateSubmitted) < new Date(dateFrom)) return false;
+    if (dateTo && new Date(c.dateSubmitted) > new Date(dateTo)) return false;
+    return true;
+  });
 
   const pageTitle = caseType ? `${caseType.replace('-', ' ')} Cases` : 'All Cases';
   const breadcrumbCategory = caseType ? caseType.replace('-', ' ') : 'Archive';
@@ -68,23 +54,22 @@ const CaseArchive = () => {
       <div className="search-filter-section">
         <input
           type="text"
-          placeholder="Search by name, case ID, or location"
+          placeholder="Search by name or location"
           value={search}
           onChange={e => setSearch(e.target.value)}
           className="search-bar"
         />
         <select value={filterType} onChange={e => setFilterType(e.target.value)} className="filter-dropdown">
           <option value="">All Types</option>
-          <option value="missing">Missing</option>
-          <option value="accident">Accident</option>
-          <option value="complaint">Complaint</option>
-          <option value="request">Request</option>
-          <option value="application">Application</option>
+          {typeOptions.map(type => (
+            <option key={type} value={type}>{type ? type.replace('-', ' ') : 'All'}</option>
+          ))}
         </select>
         <select value={filterStatus} onChange={e => setFilterStatus(e.target.value)} className="filter-dropdown">
           <option value="">All Status</option>
-          <option value="resolved">Resolved</option>
-          <option value="closed">Closed</option>
+          {statusOptions.map(status => (
+            <option key={status} value={status}>{status ? status.charAt(0).toUpperCase() + status.slice(1) : 'All'}</option>
+          ))}
         </select>
         <label>
           From:
@@ -95,19 +80,15 @@ const CaseArchive = () => {
           <input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} />
         </label>
       </div>
-            <div className="case-list">
-                {filteredCases.length > 0 ? (
-                    filteredCases.map(caseItem => (
-                        <div key={caseItem._id} className="case-item">
-                            <img src={`http://localhost:5000/${caseItem.photo}`} alt={caseItem.name} />
-                            <h2>{caseItem.name}</h2>
-                            <p>{caseItem.description}</p>
-                        </div>
-                    ))
-                ) : (
-                    <p>No cases found for this filter.</p>
-                )}
 
+      <div className="case-list">
+        {filteredCases.length > 0 ? (
+          filteredCases.map(item => (
+            <div key={item._id} className="case-item">
+              {item.photo && <img src={`http://localhost:5000${item.photo}`} alt={item.name} />}
+              <h2>{item.name}</h2>
+              <p>{item.description}</p>
+              <small>Location: {item.lastSeenLocation}</small>
             </div>
           ))
         ) : (

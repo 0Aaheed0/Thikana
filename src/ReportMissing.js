@@ -1,8 +1,6 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './ReportMissing.css';
-
 
 const ReportMissing = () => {
   const navigate = useNavigate();
@@ -15,8 +13,7 @@ const ReportMissing = () => {
     photo: null,
   });
 
-  const navigate = useNavigate();
-
+  const [status, setStatus] = useState(null); // success or error
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -45,15 +42,16 @@ const ReportMissing = () => {
       });
 
       if (response.ok) {
+        setStatus("success");
         alert('Report submitted successfully!');
-        navigate('/');
       } else {
+        setStatus("error");
         alert('Failed to submit report.');
       }
     } catch (error) {
       console.error('Error submitting report:', error);
+      setStatus("error");
       alert('An error occurred while submitting the report.');
-
     }
   };
 
