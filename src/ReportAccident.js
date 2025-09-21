@@ -19,10 +19,26 @@ const ReportAccident = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission logic here
-    console.log(formData);
+    try {
+      const response = await fetch('http://localhost:5000/api/report-accident', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      if (response.ok) {
+        alert('Accident report submitted successfully!');
+        // You might want to redirect the user to another page
+      } else {
+        alert('Failed to submit accident report.');
+      }
+    } catch (error) {
+      console.error('Error submitting accident report:', error);
+      alert('An error occurred while submitting the accident report.');
+    }
   };
 
   return (

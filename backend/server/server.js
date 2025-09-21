@@ -10,6 +10,7 @@ dotenv.config();
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use('/uploads', express.static(path.resolve('uploads')));
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
@@ -80,6 +81,76 @@ app.post("/api/login", async (req, res) => {
     res.status(200).json({ token, user: { id: user._id, username: user.username } });
   } catch (error) {
     console.error("Login error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+import MissingPerson from './models/MissingPerson.js';
+
+import path from "path";
+import multer from "multer";
+
+// Multer storage configuration
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/');
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({ storage: storage });
+
+app.post("/api/report-missing", upload.single('photo'), async (req, res) => {
+  try {
+    const { name, age, gender, lastSeenLocation, description } = req.body;
+    const photo = req.file ? req.file.path : null;
+    const newMissingPerson = new MissingPerson({
+      name,
+      age,
+      gender,
+      lastSeenLocation,
+      description,
+      photo,
+    });
+    await newMissingPerson.save();
+    res.status(201).json({ message: "Missing person report submitted successfully" });
+  } catch (error) {
+    console.error("Report missing error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+import RoadAccident from './models/RoadAccident.js';
+
+app.post("/api/report-accident", async (req, res) => {
+  try {
+    const { name, age, gender, location, injuryType, description } = req.body;
+    const newRoadAccident = new RoadAccident({
+      name,
+      age,
+      gender,
+      location,
+      injuryType,
+      description,
+    });
+    await newRoadAccident.save();
+    res.status(201).json({ message: "Road accident report submitted successfully" });
+  } catch (error) {
+    console.error("Report accident error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+app.get("/api/cases", async (req, res) => {
+  try {
+    const missingPersons = await MissingPerson.find();
+    const roadAccidents = await RoadAccident.find();
+    const cases = [...missingPersons, ...roadAccidents];
+    res.status(200).json(cases);
+  } catch (error) {
+    console.error("Get cases error:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 });

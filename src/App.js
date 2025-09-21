@@ -109,8 +109,12 @@ function HomePage() {
             Your trusted platform for reporting and tracking incidents. We are here to help you make a difference.
           </p>
           <div className="report-options">
-            <button className="report-button">Report Road Accident</button>
-            <button className="report-button">Report Missing</button>
+            <Link to="/report-accident">
+              <button className="report-button">Report Road Accident</button>
+            </Link>
+            <Link to="/report-missing">
+              <button className="report-button">Report Missing</button>
+            </Link>
           </div>
         </div>
       </header>

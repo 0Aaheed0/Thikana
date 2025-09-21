@@ -1,44 +1,52 @@
+
 import React, { useEffect, useState } from 'react';
-import { useParams, Link, NavLink } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import './CaseArchive.css';
-import articles from './articles';
 
 const CaseArchive = () => {
     const { caseType } = useParams();
+    const [cases, setCases] = useState([]);
     const [search, setSearch] = useState("");
     const [filterType, setFilterType] = useState("");
     const [filterStatus, setFilterStatus] = useState("");
     const [dateFrom, setDateFrom] = useState("");
     const [dateTo, setDateTo] = useState("");
 
-    // Dummy status and date fields for demonstration
-    // In real data, articles should have status and date fields
-    const statusOptions = ["", "resolved", "closed"];
+    useEffect(() => {
+        const fetchCases = async () => {
+            try {
+                const response = await fetch('http://localhost:5000/api/cases');
+                const data = await response.json();
+                setCases(data);
+            } catch (error) {
+                console.error('Error fetching cases:', error);
+            }
+        };
+        fetchCases();
+    }, []);
+
+    const statusOptions = ["", "open", "resolved", "closed"];
     const typeOptions = ["", "missing", "road-accident", "complaint", "request", "application"];
 
-    // Filtering logic
-    const filteredCases = articles.filter(article => {
-        // Case Type filter (from URL or dropdown)
-        if (caseType && article.caseType !== caseType) return false;
-        if (filterType && article.caseType !== filterType) return false;
-        // Search filter
+    const filteredCases = cases.filter(caseItem => {
+        if (caseType && caseItem.caseType !== caseType) return false;
+        if (filterType && caseItem.caseType !== filterType) return false;
         if (search) {
             const searchLower = search.toLowerCase();
             if (!(
-                article.title.toLowerCase().includes(searchLower) ||
-                (article.id + "").includes(searchLower) ||
-                (article.address && article.address.toLowerCase().includes(searchLower))
+                caseItem.name.toLowerCase().includes(searchLower) ||
+                (caseItem._id && caseItem._id.toString().includes(searchLower)) ||
+                (caseItem.description && caseItem.description.toLowerCase().includes(searchLower)) ||
+                (caseItem.lastSeenLocation && caseItem.lastSeenLocation.toLowerCase().includes(searchLower)) ||
+                (caseItem.location && caseItem.location.toLowerCase().includes(searchLower))
             )) return false;
         }
-        // Status filter (dummy, assumes article.status exists)
-        if (filterStatus && article.status !== filterStatus) return false;
-        // Date range filter (dummy, assumes article.dateSubmitted or article.dateClosed exists)
-        if (dateFrom && article.dateSubmitted && article.dateSubmitted < dateFrom) return false;
-        if (dateTo && article.dateSubmitted && article.dateSubmitted > dateTo) return false;
+        if (filterStatus && caseItem.status !== filterStatus) return false;
+        if (dateFrom && new Date(caseItem.dateSubmitted) < new Date(dateFrom)) return false;
+        if (dateTo && new Date(caseItem.dateSubmitted) > new Date(dateTo)) return false;
         return true;
     });
 
-    // Create a display-friendly title
     const pageTitle = caseType ? `${caseType.replace('-', ' ')} Cases` : 'All Cases';
     const breadcrumbCategory = caseType ? caseType.replace('-', ' ') : 'Archive';
 
@@ -88,10 +96,10 @@ const CaseArchive = () => {
             <div className="case-list">
                 {filteredCases.length > 0 ? (
                     filteredCases.map(caseItem => (
-                        <div key={caseItem.id} className="case-item">
-                            <img src={caseItem.image} alt={caseItem.title} />
-                            <h2>{caseItem.title}</h2>
-                            <p>{caseItem.shortDescription}</p>
+                        <div key={caseItem._id} className="case-item">
+                            <img src={`http://localhost:5000/${caseItem.photo}`} alt={caseItem.name} />
+                            <h2>{caseItem.name}</h2>
+                            <p>{caseItem.description}</p>
                         </div>
                     ))
                 ) : (
