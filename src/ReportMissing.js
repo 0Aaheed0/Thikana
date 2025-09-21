@@ -26,10 +26,31 @@ const ReportMissing = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission logic here
-    console.log(formData);
+    try {
+      const data = new FormData();
+      data.append('name', formData.name);
+      data.append('age', formData.age);
+      data.append('gender', formData.gender);
+      data.append('lastSeenLocation', formData.lastSeenLocation);
+      data.append('description', formData.description);
+      data.append('photo', formData.photo);
+
+      const response = await fetch('http://localhost:5000/api/report-missing', {
+        method: 'POST',
+        body: data,
+      });
+
+      if (response.ok) {
+        alert('Report submitted successfully!');
+      } else {
+        alert('Failed to submit report.');
+      }
+    } catch (error) {
+      console.error('Error submitting report:', error);
+      alert('An error occurred while submitting the report.');
+    }
   };
 
   return (
