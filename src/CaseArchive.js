@@ -1,101 +1,102 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import axios from 'axios';
 import './CaseArchive.css';
+import articles from './articles'; // Your homepage articles
 
 const CaseArchive = () => {
-  const { caseType } = useParams();
   const [cases, setCases] = useState([]);
   const [search, setSearch] = useState("");
   const [filterType, setFilterType] = useState("");
-  const [filterStatus, setFilterStatus] = useState("");
-  const [dateFrom, setDateFrom] = useState("");
-  const [dateTo, setDateTo] = useState("");
-
-  const statusOptions = ["", "open", "resolved", "closed"];
-  const typeOptions = ["", "missing", "road-accident", "complaint", "request", "application"];
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/reports")
-      .then(res => res.json())
-      .then(data => setCases(data))
-      .catch(err => console.error("Error fetching cases:", err));
+    const fetchCases = async () => {
+      try {
+        const res = await axios.get('http://localhost:5000/api/reports');
+        // Map missing and accident reports to have a "caseType" field
+        const mappedReports = res.data.map(item => {
+          if (item.lastSeenLocation) return { ...item, caseType: 'missing' };
+          if (item.location) return { ...item, caseType: 'road-accident' };
+          return { ...item };
+        });
+
+        // Merge homepage articles (give them a type if needed)
+        const mergedCases = [...articles.map(a => ({ ...a, caseType: a.caseType || "article" })), ...mappedReports];
+
+        // Sort by dateSubmitted if exists
+        mergedCases.sort((a, b) => new Date(b.dateSubmitted || 0) - new Date(a.dateSubmitted || 0));
+
+        setCases(mergedCases);
+      } catch (err) {
+        console.error("Error fetching cases:", err);
+      }
+    };
+    fetchCases();
   }, []);
 
+  // Filtering logic
   const filteredCases = cases.filter(c => {
-    if (caseType && c.caseType !== caseType) return false;
+    // Filter by type dropdown
     if (filterType && c.caseType !== filterType) return false;
+
+    // Filter by search
     if (search) {
       const s = search.toLowerCase();
-      if (!(c.name.toLowerCase().includes(s) || c.lastSeenLocation.toLowerCase().includes(s))) {
-        return false;
-      }
+      return (
+        (c.name?.toLowerCase().includes(s)) ||
+        (c.lastSeenLocation?.toLowerCase().includes(s)) ||
+        (c.location?.toLowerCase().includes(s)) ||
+        (c.title?.toLowerCase().includes(s))
+      );
     }
-    if (filterStatus && c.status !== filterStatus) return false;
-    if (dateFrom && new Date(c.dateSubmitted) < new Date(dateFrom)) return false;
-    if (dateTo && new Date(c.dateSubmitted) > new Date(dateTo)) return false;
     return true;
   });
 
-  const pageTitle = caseType ? `${caseType.replace('-', ' ')} Cases` : 'All Cases';
-  const breadcrumbCategory = caseType ? caseType.replace('-', ' ') : 'Archive';
-
-  useEffect(() => {
-    document.title = `Case Archive - ${pageTitle}`;
-  }, [pageTitle]);
-
   return (
     <div className="case-archive-container">
-      <div className="breadcrumb">
-        <Link to="/">Home</Link> &gt; <span>Cases</span> &gt; <span style={{textTransform: 'capitalize'}}>{breadcrumbCategory}</span>
-      </div>
-      <h1 style={{textTransform: 'capitalize'}}>{pageTitle}</h1>
+      <h2>Case Archive</h2>
 
-      {/* Search & Filter Section */}
       <div className="search-filter-section">
         <input
           type="text"
-          placeholder="Search by name or location"
+          placeholder="Search by name, location, or title"
           value={search}
           onChange={e => setSearch(e.target.value)}
           className="search-bar"
         />
-        <select value={filterType} onChange={e => setFilterType(e.target.value)} className="filter-dropdown">
+        <select
+          value={filterType}
+          onChange={e => setFilterType(e.target.value)}
+          className="filter-dropdown"
+        >
           <option value="">All Types</option>
-          {typeOptions.map(type => (
-            <option key={type} value={type}>{type ? type.replace('-', ' ') : 'All'}</option>
-          ))}
+          <option value="missing">Missing</option>
+          <option value="road-accident">Road Accident</option>
+          <option value="article">Article</option>
         </select>
-        <select value={filterStatus} onChange={e => setFilterStatus(e.target.value)} className="filter-dropdown">
-          <option value="">All Status</option>
-          {statusOptions.map(status => (
-            <option key={status} value={status}>{status ? status.charAt(0).toUpperCase() + status.slice(1) : 'All'}</option>
-          ))}
-        </select>
-        <label>
-          From:
-          <input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} />
-        </label>
-        <label>
-          To:
-          <input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} />
-        </label>
       </div>
 
       <div className="case-list">
-        {filteredCases.length > 0 ? (
+        {filteredCases.length === 0 ? (
+          <p>No cases found.</p>
+        ) : (
           filteredCases.map(item => (
-            <div key={item._id} className="case-item">
-              {item.photo && <img src={`http://localhost:5000${item.photo}`} alt={item.name} />}
-              <h2>{item.name}</h2>
-              <p>{item.description}</p>
-              <small>Location: {item.lastSeenLocation}</small>
+            <div key={item._id || item.id} className="case-item">
+              {(item.photo || item.image) && (
+                <img
+                  src={(item.photo || item.image)?.startsWith('http')
+                    ? (item.photo || item.image)
+                    : `http://localhost:5000${item.photo || item.image}`}
+                  alt={item.name || item.title}
+                />
+              )}
+              <h3>{item.title || item.name}</h3>
+              <p>{item.description || item.article}</p>
+              {item.lastSeenLocation && <small>Location: {item.lastSeenLocation}</small>}
+              {item.location && <small>Accident Location: {item.location}</small>}
             </div>
           ))
-        ) : (
-          <p>No cases found for this filter.</p>
         )}
       </div>
-      <Link to="/" className="back-button">Go Back</Link>
     </div>
   );
 };

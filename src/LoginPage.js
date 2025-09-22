@@ -1,84 +1,53 @@
+// LoginPage.jsx
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import './LoginPage.css';
-import ForgotPassword from './ForgotPassword';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import axios from 'axios';
 import { useAuth } from './AuthContext';
 
-function LoginPage() {
-  const [showForgotPassword, setShowForgotPassword] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState({
-    username: '',
-    password: '',
-  });
-  const [error, setError] = useState('');
+const LoginPage = () => {
   const { login } = useAuth();
+  const [form, setForm] = useState({ username: '', password: '' });
   const navigate = useNavigate();
 
-  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+  const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleForgotPasswordClick = () => {
-    setShowForgotPassword(true);
-  };
-
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${API_URL}/api/login`, formData);
-      login(res.data);
-      navigate('/');
+      const res = await fetch('http://localhost:5000/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        login(data.token, data.user);
+        navigate('/');
+      } else {
+        console.error('Login failed:', await res.text());
+      }
     } catch (err) {
       console.error('Login error:', err);
-      if (err.response) {
-        setError(err.response.data.message);
-      } else if (err.request) {
-        setError('No response from server. Please check your network connection.');
-      } else {
-        setError('Something went wrong. Please try again later.');
-      }
     }
   };
 
   return (
-    <div className="login-page">
-      <div className="login-container">
+    <div className="login-container">
+      <form className="login-form" onSubmit={handleSubmit}>
         <h2>Login</h2>
-        <form onSubmit={handleSubmit}>
-          {error && <p className="error">{error}</p>}
-          <div className="input-group">
-            <label htmlFor="user-name">Username</label>
-            <input type="text" id="username" name="username" onChange={handleChange} required />
-          </div>
-          <div className="input-group">
-            <label htmlFor="password">Password</label>
-            <div className="password-wrapper">
-              <input type={showPassword ? 'text' : 'password'} id="password" name="password" onChange={handleChange} required />
-              <button type="button" onClick={togglePasswordVisibility} className="toggle-password">
-                {showPassword ? <FaEyeSlash /> : <FaEye />}
-              </button>
-            </div>
-          </div>
-          <button type="submit" className="login-button">Login</button>
-        </form>
-        <div className="extra-links">
-          <button onClick={handleForgotPasswordClick} className="link-button">Forgot Password?</button>
-          <span> | </span>
-          <a href="/signup">Create an account</a>
+        <div className="input-group">
+          <label htmlFor="username">Username</label>
+          <input type="text" id="username" name="username" value={form.username} onChange={handleChange} required/>
         </div>
-      </div>
-      {showForgotPassword && <ForgotPassword />}
+        <div className="input-group">
+          <label htmlFor="password">Password</label>
+          <input type="password" id="password" name="password" value={form.password} onChange={handleChange} required/>
+        </div>
+        <button type="submit" className="login-button">Login</button>
+        <p>Don't have an account? <Link to="/signup">Sign up here</Link></p>
+      </form>
     </div>
   );
-}
+};
 
 export default LoginPage;

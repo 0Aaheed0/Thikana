@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import './ReportMissing.css';
+import axios from 'axios';
 
 const ReportMissing = () => {
-  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     age: "",
@@ -13,7 +12,7 @@ const ReportMissing = () => {
     photo: null,
   });
 
-  const [status, setStatus] = useState(null); // success or error
+  const [status, setStatus] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,7 +25,6 @@ const ReportMissing = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       const data = new FormData();
       data.append('name', formData.name);
@@ -34,24 +32,24 @@ const ReportMissing = () => {
       data.append('gender', formData.gender);
       data.append('lastSeenLocation', formData.lastSeenLocation);
       data.append('description', formData.description);
-      data.append('photo', formData.photo);
+      if (formData.photo) data.append('photo', formData.photo);
 
-      const response = await fetch('http://localhost:5000/api/report-missing', {
-        method: 'POST',
-        body: data,
+      const response = await axios.post('http://localhost:5000/api/report-missing', data, {
+        headers: { 'Content-Type': 'multipart/form-data' }
       });
 
-      if (response.ok) {
+      if (response.status === 201) {
         setStatus("success");
-        alert('Report submitted successfully!');
+        alert("✅ Report submitted successfully!");
+        setFormData({ name:"", age:"", gender:"", lastSeenLocation:"", description:"", photo:null });
       } else {
         setStatus("error");
-        alert('Failed to submit report.');
+        alert("❌ Failed to submit report.");
       }
-    } catch (error) {
-      console.error('Error submitting report:', error);
+    } catch (err) {
+      console.error("Error submitting report:", err);
       setStatus("error");
-      alert('An error occurred while submitting the report.');
+      alert("❌ Error submitting report.");
     }
   };
 
@@ -59,85 +57,29 @@ const ReportMissing = () => {
     <div className="report-missing-container">
       <h2>Report Missing Person</h2>
       <form onSubmit={handleSubmit} className="report-missing-form">
-        {status === "success" && (
-          <p className="submission-success">
-            ✅ Report submitted! Redirecting...
-          </p>
-        )}
-        {status === "error" && (
-          <p className="submission-error">
-            ❌ Error submitting report. Please try again.
-          </p>
-        )}
-
-        <label>
-          Name:
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-          />
+        <label>Name:
+          <input type="text" name="name" value={formData.name} onChange={handleChange} required />
         </label>
-
-        <label>
-          Age:
-          <input
-            type="number"
-            name="age"
-            value={formData.age}
-            onChange={handleChange}
-            required
-          />
+        <label>Age:
+          <input type="number" name="age" value={formData.age} onChange={handleChange} required />
         </label>
-
-        <label>
-          Gender:
-          <select
-            name="gender"
-            value={formData.gender}
-            onChange={handleChange}
-            required
-          >
+        <label>Gender:
+          <select name="gender" value={formData.gender} onChange={handleChange} required>
             <option value="">Select Gender</option>
             <option value="male">Male</option>
             <option value="female">Female</option>
             <option value="other">Other</option>
           </select>
         </label>
-
-        <label>
-          Last Seen Location:
-          <input
-            type="text"
-            name="lastSeenLocation"
-            value={formData.lastSeenLocation}
-            onChange={handleChange}
-            required
-          />
+        <label>Last Seen Location:
+          <input type="text" name="lastSeenLocation" value={formData.lastSeenLocation} onChange={handleChange} required />
         </label>
-
-        <label>
-          Description:
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            required
-          />
+        <label>Description:
+          <textarea name="description" value={formData.description} onChange={handleChange} required />
         </label>
-
-        <label>
-          Photo:
-          <input
-            type="file"
-            name="photo"
-            accept="image/*"
-            onChange={handleFileChange}
-          />
+        <label>Photo:
+          <input type="file" name="photo" accept="image/*" onChange={handleFileChange} />
         </label>
-
         <button type="submit">Submit Report</button>
       </form>
     </div>

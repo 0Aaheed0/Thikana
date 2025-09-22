@@ -1,6 +1,7 @@
 .data-specialists-section {
   padding: 3rem 2rem;
   text-align: center;
+  overflow: hidden; /* ✅ Prevent overlap */
 }
 
 .data-specialists-section h2 {
@@ -15,6 +16,8 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin: 1rem;
   text-align: left;
+  height: 100%;
+  box-sizing: border-box;
 }
 
 .specialist-card img {
@@ -51,4 +54,10 @@
 .contact-info {
   font-weight: bold;
   margin-top: 1rem;
+}
+
+/* ✅ Fix slick slides spacing */
+.slick-slide {
+  padding: 0 10px;
+  box-sizing: border-box;
 }

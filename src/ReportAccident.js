@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './ReportAccident.css';
+import axios from 'axios';
 
 const ReportAccident = () => {
   const [formData, setFormData] = useState({
@@ -10,7 +11,8 @@ const ReportAccident = () => {
     injuryType: '',
     description: '',
   });
-  const [submissionStatus, setSubmissionStatus] = useState(null);
+
+  const [status, setStatus] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,28 +22,19 @@ const ReportAccident = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:5000/api/report-accident', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        setSubmissionStatus('success');
-        setFormData({
-          name: '',
-          age: '',
-          gender: '',
-          location: '',
-          injuryType: '',
-          description: '',
-        });
+      const response = await axios.post('http://localhost:5000/api/report-accident', formData);
+      if (response.status === 201) {
+        setStatus("success");
+        alert("✅ Accident report submitted successfully!");
+        setFormData({ name:'', age:'', gender:'', location:'', injuryType:'', description:'' });
       } else {
-        setSubmissionStatus('error');
+        setStatus("error");
+        alert("❌ Failed to submit report.");
       }
-    } catch (error) {
-      console.error('Error submitting accident report:', error);
-      setSubmissionStatus('error');
+    } catch (err) {
+      console.error("Error submitting accident report:", err);
+      setStatus("error");
+      alert("❌ Error submitting report.");
     }
   };
 
@@ -49,23 +42,13 @@ const ReportAccident = () => {
     <div className="report-accident-container">
       <h2>Report Accident</h2>
       <form onSubmit={handleSubmit} className="report-accident-form">
-        {submissionStatus === 'success' && (
-          <p className="submission-success">✅ Submission successful!</p>
-        )}
-        {submissionStatus === 'error' && (
-          <p className="submission-error">❌ Error submitting report. Please try again.</p>
-        )}
-
-        <label>
-          Name:
+        <label>Name:
           <input type="text" name="name" value={formData.name} onChange={handleChange} required />
         </label>
-        <label>
-          Age:
+        <label>Age:
           <input type="number" name="age" value={formData.age} onChange={handleChange} required />
         </label>
-        <label>
-          Gender:
+        <label>Gender:
           <select name="gender" value={formData.gender} onChange={handleChange} required>
             <option value="">Select Gender</option>
             <option value="Male">Male</option>
@@ -73,16 +56,13 @@ const ReportAccident = () => {
             <option value="Other">Other</option>
           </select>
         </label>
-        <label>
-          Location:
+        <label>Location:
           <input type="text" name="location" value={formData.location} onChange={handleChange} required />
         </label>
-        <label>
-          Injury Type:
+        <label>Injury Type:
           <input type="text" name="injuryType" value={formData.injuryType} onChange={handleChange} required />
         </label>
-        <label>
-          Description:
+        <label>Description:
           <textarea name="description" value={formData.description} onChange={handleChange} required />
         </label>
         <button type="submit">Submit Report</button>

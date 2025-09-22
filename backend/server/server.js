@@ -2,95 +2,69 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
 import multer from "multer";
 import path from "path";
 
-import User from "./models/User.js";
-import Report from "./models/Report.js";
-import RoadAccident from "./models/RoadAccident.js";
-
+// ✅ Load env variables
 dotenv.config();
 
 const app = express();
-app.use(cors());
+app.use(cors({ origin: "http://localhost:3000" }));
 app.use(express.json());
-app.use('/uploads', express.static(path.resolve('uploads')));
+app.use("/uploads", express.static("uploads")); // serve uploaded photos
 
-// ✅ Multer config
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, "uploads/"),
-  filename: (req, file, cb) => {
-    const uniqueName = Date.now() + "-" + file.originalname;
-    cb(null, uniqueName);
-  },
-});
-const upload = multer({ storage });
-
-// Connect to MongoDB
+// ✅ MongoDB Connection
 mongoose
-  .connect(process.env.MONGO_URI)
+  .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("✅ MongoDB connected"))
   .catch((err) => console.error("❌ MongoDB connection error:", err));
 
-/* ---------- Auth Routes ---------- */
-app.post("/api/signup", async (req, res) => {
-  try {
-    const { username, email, password } = req.body;
-
-    if (username.startsWith(" ")) {
-      return res.status(400).json({ message: "Username cannot start with a space" });
-    }
-
-    if (!email.endsWith("gmail.com")) {
-      return res.status(400).json({ message: "Email must be a gmail address" });
-    }
-
-    const existingUser = await User.findOne({ $or: [{ email }, { username }] });
-    if (existingUser) {
-      return res.status(400).json({ message: "Username or email already exists" });
-    }
-
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-
-    const newUser = new User({ username, email, password: hashedPassword });
-    await newUser.save();
-
-    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
-
-    res.status(201).json({ token, user: { id: newUser._id, username: newUser.username } });
-  } catch (error) {
-    console.error("Signup error:", error);
-    res.status(500).json({ message: "Internal server error" });
-  }
+// ✅ Multer setup for photo upload
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, "uploads/"),
+  filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname)),
 });
+const upload = multer({ storage });
 
-app.post("/api/login", async (req, res) => {
-  try {
-    const { username, password } = req.body;
-
-    const user = await User.findOne({ username });
-    if (!user) return res.status(400).json({ message: "Invalid credentials" });
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
-
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
-
-    res.status(200).json({ token, user: { id: user._id, username: user.username } });
-  } catch (error) {
-    res.status(500).json({ message: "Internal server error" });
-  }
+// ✅ Mongoose Schemas
+const reportSchema = new mongoose.Schema({
+  name: String,
+  age: Number,
+  gender: String,
+  lastSeenLocation: String,
+  description: String,
+  photo: String,
+  title: String,
+  article: String,
+  caseType: String, // "missing"
+  dateSubmitted: { type: Date, default: Date.now },
 });
+const Report = mongoose.model("Report", reportSchema);
 
-/* ---------- Report Routes ---------- */
+const accidentSchema = new mongoose.Schema({
+  name: String,
+  age: Number,
+  gender: String,
+  location: String,
+  injuryType: String,
+  description: String,
+  title: String,
+  article: String,
+  caseType: String, // "road-accident"
+  dateSubmitted: { type: Date, default: Date.now },
+});
+const RoadAccident = mongoose.model("RoadAccident", accidentSchema);
 
-// Missing person report
+// ✅ Routes
+
+// 📌 Missing Report
 app.post("/api/report-missing", upload.single("photo"), async (req, res) => {
   try {
     const { name, age, gender, lastSeenLocation, description } = req.body;
+
+    if (!name || !age || !gender || !lastSeenLocation || !description) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
 
     const newReport = new Report({
       name,
@@ -98,51 +72,66 @@ app.post("/api/report-missing", upload.single("photo"), async (req, res) => {
       gender,
       lastSeenLocation,
       description,
-      photo: req.file ? `/uploads/${req.file.filename}` : null
+      photo: req.file ? `/uploads/${req.file.filename}` : null,
+      title: `Missing Person Reported: ${name}`,
+      article: `${name}, aged ${age}, identified as ${gender}, was last seen at ${lastSeenLocation}. Description: ${description}.`,
+      caseType: "missing",
     });
 
     await newReport.save();
-    res.status(201).json({ message: "Report submitted successfully", report: newReport });
-  } catch (error) {
-    console.error("Report error:", error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(201).json({ message: "✅ Missing report submitted successfully", report: newReport });
+  } catch (err) {
+    console.error("Report error:", err);
+    res.status(500).json({ message: "❌ Internal server error" });
   }
 });
 
-// Accident report
-app.post('/api/report-accident', async (req, res) => {
+// 📌 Accident Report
+app.post("/api/report-accident", async (req, res) => {
   try {
     const { name, age, gender, location, injuryType, description } = req.body;
-    const newRoadAccident = new RoadAccident({
+
+    if (!name || !age || !gender || !location || !injuryType || !description) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    const newAccident = new RoadAccident({
       name,
       age,
       gender,
       location,
       injuryType,
       description,
+      title: `Accident Reported at ${location}`,
+      article: `${name}, aged ${age}, identified as ${gender}, was in an accident at ${location}. Injury type: ${injuryType}. Description: ${description}.`,
+      caseType: "road-accident",
     });
-    await newRoadAccident.save();
-    res.status(201).json({ message: 'Road accident report submitted successfully', report: newRoadAccident });
-  } catch (error) {
-    console.error('Error submitting road accident report:', error);
-    res.status(500).json({ message: 'Internal server error' });
+
+    await newAccident.save();
+    res.status(201).json({ message: "✅ Accident report submitted successfully", report: newAccident });
+  } catch (err) {
+    console.error("Accident error:", err);
+    res.status(500).json({ message: "❌ Internal server error" });
   }
 });
 
-// Get all reports
+// 📌 Fetch All Reports
 app.get("/api/reports", async (req, res) => {
   try {
-    const missingReports = await Report.find().lean();
-    const accidentReports = await RoadAccident.find().lean();
+    const missing = await Report.find().lean();
+    const accidents = await RoadAccident.find().lean();
+    const allReports = [...missing, ...accidents];
 
-    const allReports = [...missingReports, ...accidentReports];
-    allReports.sort((a, b) => b.dateSubmitted - a.dateSubmitted);
+    // sort newest first
+    allReports.sort((a, b) => new Date(b.dateSubmitted) - new Date(a.dateSubmitted));
 
     res.json(allReports);
-  } catch (error) {
-    res.status(500).json({ message: "Failed to fetch reports" });
+  } catch (err) {
+    console.error("Fetch reports error:", err);
+    res.status(500).json({ message: "❌ Failed to fetch reports" });
   }
 });
 
+// ✅ Start Server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server running on port: ${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

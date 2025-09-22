@@ -10,30 +10,17 @@ import Organizations from './Organizations';
 import LoginPage from './LoginPage';
 import SignupPage from './SignupPage';
 import CaseArchive from './CaseArchive';
-import HelpBoard from './HelpBoard';
 import ReportMissing from './ReportMissing';
 import ReportAccident from './ReportAccident';
-
-// Account Info Component
-function AccountInfo() {
-  const { user, logout } = useAuth();
-
-  return (
-    <div className="account-info">
-      <p>Logged in as {user.username}</p>
-      <button onClick={logout}>Logout</button>
-    </div>
-  );
-}
+import UserProfileSidebar from './UserProfileSidebar';
+import HelpBoard from './HelpBoard';
 
 // Navbar Component
-function Navbar() {
+function Navbar({ toggleUserProfile }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isAccountInfoOpen, setIsAccountInfoOpen] = useState(false);
   const { user } = useAuth();
 
   const toggleModal = () => setIsModalOpen(!isModalOpen);
-  const toggleAccountInfo = () => setIsAccountInfoOpen(!isAccountInfoOpen);
 
   return (
     <nav className="navbar">
@@ -57,17 +44,16 @@ function Navbar() {
           <i className="fas fa-car-crash"></i> Report Accident
         </Link>
         <Link to="/help-board" className="navbar-link">
-          <i className="fas fa-hands-helping"></i> Help Board
+          <i className="fas fa-question-circle"></i> Help Board
         </Link>
       </div>
 
       <div className="navbar-right">
         {user ? (
           <div className="account-menu">
-            <button className="account-button" onClick={toggleAccountInfo}>
+            <button className="account-button" onClick={toggleUserProfile}>
               <i className="fas fa-user-circle"></i>
             </button>
-            {isAccountInfoOpen && <AccountInfo />}
           </div>
         ) : (
           <div className="account-menu">
@@ -140,12 +126,6 @@ function HomePage() {
           <h3>Resolved Cases</h3>
           <p>1000</p>
         </div>
-        <div className="statistic-item">
-          <Link to="/help-board">
-            <h3>Help Board</h3>
-            <p>Get Help</p>
-          </Link>
-        </div>
       </section>
 
       <DataSpecialists />
@@ -172,18 +152,32 @@ function HomePage() {
 }
 
 function App() {
+  const [isUserProfileOpen, setIsUserProfileOpen] = useState(false);
+  const { user } = useAuth();
+
+  const toggleUserProfile = () => {
+    setIsUserProfileOpen(!isUserProfileOpen);
+  };
+
   return (
     <Router>
-      <Navbar />
+      <Navbar toggleUserProfile={toggleUserProfile} />
+      {user && (
+        <UserProfileSidebar
+          user={user}
+          onClose={toggleUserProfile}
+          isOpen={isUserProfileOpen}
+        />
+      )}
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/case-archive" element={<CaseArchive />} />
         <Route path="/case-archive/:caseType" element={<CaseArchive />} />
-        <Route path="/help-board" element={<HelpBoard />} />
         <Route path="/report-missing" element={<ReportMissing />} />
         <Route path="/report-accident" element={<ReportAccident />} />
+        <Route path="/help-board" element={<HelpBoard />} />
       </Routes>
     </Router>
   );

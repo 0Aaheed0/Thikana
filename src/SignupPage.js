@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./SignupPage.css";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import axios from "axios";
+import { useAuth } from "./AuthContext";
 
 function SignupPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -14,8 +15,8 @@ function SignupPage() {
     confirmPassword: "",
   });
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   // ✅ Backend API URL from .env or fallback
   const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
@@ -36,25 +37,21 @@ function SignupPage() {
     // Frontend validation
     if (!formData.username || !formData.email || !formData.password || !formData.confirmPassword) {
       setError("All fields are required");
-      setSuccess("");
       return;
     }
 
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match");
-      setSuccess("");
       return;
     }
 
     if (formData.username.startsWith(" ")) {
       setError("Username cannot start with a space");
-      setSuccess("");
       return;
     }
 
     if (!formData.email.endsWith("gmail.com")) {
       setError("Email must be a gmail address");
-      setSuccess("");
       return;
     }
 
@@ -66,15 +63,9 @@ function SignupPage() {
         password: formData.password,
       });
 
-      // Show success and reset form
-      setSuccess(res.data.message || "Signup successful!");
-      setError("");
-      setFormData({
-        username: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-      });
+      // Log the user in and save the token
+      login(res.data.user);
+      localStorage.setItem("token", res.data.token);
 
       // Redirect to home page
       navigate("/");
@@ -88,8 +79,6 @@ function SignupPage() {
       } else {
         setError("Something went wrong. Please try again later.");
       }
-
-      setSuccess("");
     }
   };
 
@@ -101,7 +90,6 @@ function SignupPage() {
         <form onSubmit={handleSubmit}>
           {/* Error and Success Messages */}
           {error && <p className="error">{error}</p>}
-          {success && <p className="success">{success}</p>}
 
           {/* Username */}
           <div className="input-group">
