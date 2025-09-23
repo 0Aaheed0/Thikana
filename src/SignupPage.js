@@ -1,3 +1,4 @@
+// SignupPage.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./SignupPage.css";
@@ -18,60 +19,50 @@ function SignupPage() {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  // ✅ Backend API URL from .env or fallback
   const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
-  // Toggle password visibility
   const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
   const toggleConfirmPasswordVisibility = () => setShowConfirmPassword((prev) => !prev);
 
-  // Handle form input change
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Frontend validation
     if (!formData.username || !formData.email || !formData.password || !formData.confirmPassword) {
       setError("All fields are required");
       return;
     }
-
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match");
       return;
     }
-
     if (formData.username.startsWith(" ")) {
       setError("Username cannot start with a space");
       return;
     }
-
     if (!formData.email.endsWith("gmail.com")) {
       setError("Email must be a gmail address");
       return;
     }
 
     try {
-      // Send signup request to backend
       const res = await axios.post(`${API_URL}/api/signup`, {
         username: formData.username,
         email: formData.email,
         password: formData.password,
       });
 
-      // Log the user in and save the token
-      login(res.data.user);
+      // ✅ Save token + user with profilePhoto
+      login(res.data.token, res.data.user);
       localStorage.setItem("token", res.data.token);
+      localStorage.setItem("user", JSON.stringify(res.data.user));
 
-      // Redirect to home page
       navigate("/");
     } catch (err) {
       console.error("Signup error:", err);
-
       if (err.response?.data?.message) {
         setError(err.response.data.message);
       } else if (err.request) {
@@ -86,87 +77,36 @@ function SignupPage() {
     <div className="signup-page">
       <div className="signup-container">
         <h2>Sign Up</h2>
-
         <form onSubmit={handleSubmit}>
-          {/* Error and Success Messages */}
           {error && <p className="error">{error}</p>}
-
-          {/* Username */}
           <div className="input-group">
             <label htmlFor="username">Username</label>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              required
-            />
+            <input type="text" id="username" name="username" value={formData.username} onChange={handleChange} required />
           </div>
-
-          {/* Email */}
           <div className="input-group">
             <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
+            <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} required />
           </div>
-
-          {/* Password */}
           <div className="input-group">
             <label htmlFor="password">Password</label>
             <div className="password-wrapper">
-              <input
-                type={showPassword ? "text" : "password"}
-                id="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                required
-              />
-              <button
-                type="button"
-                onClick={togglePasswordVisibility}
-                className="toggle-password"
-              >
+              <input type={showPassword ? "text" : "password"} id="password" name="password" value={formData.password} onChange={handleChange} required />
+              <button type="button" onClick={togglePasswordVisibility} className="toggle-password">
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </button>
             </div>
           </div>
-
-          {/* Confirm Password */}
           <div className="input-group">
             <label htmlFor="confirm-password">Confirm Password</label>
             <div className="password-wrapper">
-              <input
-                type={showConfirmPassword ? "text" : "password"}
-                id="confirm-password"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                required
-              />
-              <button
-                type="button"
-                onClick={toggleConfirmPasswordVisibility}
-                className="toggle-password"
-              >
+              <input type={showConfirmPassword ? "text" : "password"} id="confirm-password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} required />
+              <button type="button" onClick={toggleConfirmPasswordVisibility} className="toggle-password">
                 {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
               </button>
             </div>
           </div>
-
-          {/* Submit Button */}
-          <button type="submit" className="signup-button">
-            Sign Up
-          </button>
+          <button type="submit" className="signup-button">Sign Up</button>
         </form>
-
         <div className="extra-links">
           <a href="/login">Already have an account? Login</a>
         </div>

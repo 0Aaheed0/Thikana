@@ -37,12 +37,13 @@ const UserProfileSidebar = ({ user, onClose, isOpen }) => {
         headers: { 'x-auth-token': token },
         body: formData
       });
+if (res.ok) {
+  const data = await res.json();
+  updateUser(data.user); // update global state
+  setPreviewSrc(`http://localhost:5000${data.user.profilePhoto}?t=${Date.now()}`); // refresh preview with uploaded image
+  setProfilePhoto(null); // reset local file
+}
 
-      if (res.ok) {
-        const data = await res.json();
-        updateUser(data.user); // update global state
-        setPreviewSrc(`http://localhost:5000${data.user.profilePhoto}?t=${Date.now()}`); // refresh preview
-        setProfilePhoto(null); // reset local file
         onClose();
       } else {
         console.error('Failed to update profile:', await res.text());
@@ -51,6 +52,10 @@ const UserProfileSidebar = ({ user, onClose, isOpen }) => {
       console.error('Error updating profile:', err);
     }
   };
+
+const profileSrc = user?.profilePhoto
+  ? `http://localhost:5000${user.profilePhoto}?t=${Date.now()}`
+  : 'https://via.placeholder.com/150';
 
   return (
     <div className={`user-profile-sidebar ${isOpen ? 'open' : ''}`}>

@@ -21,7 +21,12 @@ const LoginPage = () => {
       });
       if (res.ok) {
         const data = await res.json();
+
+        // ✅ Save token + user with profilePhoto
         login(data.token, data.user);
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user));
+
         navigate('/');
       } else {
         console.error('Login failed:', await res.text());
@@ -51,3 +56,4 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
+
