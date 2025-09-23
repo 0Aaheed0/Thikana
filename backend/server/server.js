@@ -4,6 +4,8 @@ import cors from "cors";
 import dotenv from "dotenv";
 import multer from "multer";
 import path from "path";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 // ✅ Load env variables
 dotenv.config();
@@ -55,9 +57,90 @@ const accidentSchema = new mongoose.Schema({
 });
 const RoadAccident = mongoose.model("RoadAccident", accidentSchema);
 
-// ✅ Routes
+// ✅ User Schema for Auth
+const userSchema = new mongoose.Schema({
+  username: { type: String, required: true, unique: true },
+  email:    { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+});
+const User = mongoose.model("User", userSchema);
 
-// 📌 Missing Report
+// ==========================
+// 📌 AUTH ROUTES
+// ==========================
+
+// Signup
+app.post("/api/signup", async (req, res) => {
+  try {
+    const { username, email, password } = req.body;
+
+    if (!username || !email || !password) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    const existingUser = await User.findOne({ $or: [{ email }, { username }] });
+    if (existingUser) {
+      return res.status(400).json({ message: "Username or Email already taken" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = new User({ username, email, password: hashedPassword });
+    await newUser.save();
+
+    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET || "secret", {
+      expiresIn: "1d",
+    });
+
+    res.status(201).json({
+      message: "✅ User registered successfully",
+      user: { id: newUser._id, username: newUser.username, email: newUser.email },
+      token,
+    });
+  } catch (err) {
+    console.error("Signup error:", err);
+    res.status(500).json({ message: "❌ Internal server error" });
+  }
+});
+
+// Login
+app.post("/api/login", async (req, res) => {
+  try {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(400).json({ message: "Invalid username or password" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid username or password" });
+    }
+
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET || "secret", {
+      expiresIn: "1d",
+    });
+
+    res.json({
+      message: "✅ Login successful",
+      user: { id: user._id, username: user.username, email: user.email },
+      token,
+    });
+  } catch (err) {
+    console.error("Login error:", err);
+    res.status(500).json({ message: "❌ Internal server error" });
+  }
+});
+
+// ==========================
+// 📌 EXISTING ROUTES
+// ==========================
+
+// Missing Report
 app.post("/api/report-missing", upload.single("photo"), async (req, res) => {
   try {
     const { name, age, gender, lastSeenLocation, description } = req.body;
@@ -86,7 +169,7 @@ app.post("/api/report-missing", upload.single("photo"), async (req, res) => {
   }
 });
 
-// 📌 Accident Report
+// Accident Report
 app.post("/api/report-accident", async (req, res) => {
   try {
     const { name, age, gender, location, injuryType, description } = req.body;
@@ -115,7 +198,7 @@ app.post("/api/report-accident", async (req, res) => {
   }
 });
 
-// 📌 Fetch All Reports
+// Fetch All Reports
 app.get("/api/reports", async (req, res) => {
   try {
     const missing = await Report.find().lean();
