@@ -21,14 +21,29 @@ mongoose
   .then(() => console.log("✅ MongoDB connected"))
   .catch((err) => console.error("❌ MongoDB connection error:", err));
 
-// ✅ Multer setup for photo upload
+// ==========================
+// 📌 Multer setup for file uploads
+// ==========================
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, "uploads/"),
   filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname)),
 });
 const upload = multer({ storage });
 
-// ✅ Mongoose Schemas
+// ==========================
+// 📌 Mongoose Schemas
+// ==========================
+
+// User Schema
+const userSchema = new mongoose.Schema({
+  username: { type: String, required: true, unique: true },
+  email:    { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  profilePhoto: { type: String }, // ✅ added field
+});
+const User = mongoose.model("User", userSchema);
+
+// Report Schemas
 const reportSchema = new mongoose.Schema({
   name: String,
   age: Number,
@@ -57,104 +72,146 @@ const accidentSchema = new mongoose.Schema({
 });
 const RoadAccident = mongoose.model("RoadAccident", accidentSchema);
 
-// ✅ User Schema for Auth
-const userSchema = new mongoose.Schema({
-  username: { type: String, required: true, unique: true },
-  email:    { type: String, required: true, unique: true },
-  password: { type: String, required: true },
+// ==========================
+// 📌 ADMIN ROUTES
+// ==========================
+const allowedAdmins = [
+  { email: "aaheedadmin@gmail.com", password: "aaheed94" },
+  { email: "mirazadmin@gmail.com", password: "miraz92" },
+  { email: "youshaadmin@gmail.com", password: "yousha87" },
+];
+
+app.post("/api/admin/login", (req, res) => {
+  const { email, password } = req.body;
+  const admin = allowedAdmins.find((a) => a.email === email && a.password === password);
+  if (!admin) return res.status(401).json({ message: "❌ Invalid admin credentials" });
+
+  const token = jwt.sign({ email, isAdmin: true }, process.env.JWT_SECRET, { expiresIn: "1d" });
+  res.json({ message: "✅ Admin login successful", token });
 });
-const User = mongoose.model("User", userSchema);
 
-// ==========================
-// 📌 AUTH ROUTES
-// ==========================
+// Middleware to protect admin routes
+function verifyAdmin(req, res, next) {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) return res.status(401).json({ message: "❌ No token" });
 
-// Signup
-app.post("/api/signup", async (req, res) => {
+  const token = authHeader.split(" ")[1];
   try {
-    const { username, email, password } = req.body;
-
-    if (!username || !email || !password) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
-
-    const existingUser = await User.findOne({ $or: [{ email }, { username }] });
-    if (existingUser) {
-      return res.status(400).json({ message: "Username or Email already taken" });
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({ username, email, password: hashedPassword });
-    await newUser.save();
-
-    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET || "secret", {
-      expiresIn: "1d",
-    });
-
-    res.status(201).json({
-      message: "✅ User registered successfully",
-      user: { id: newUser._id, username: newUser.username, email: newUser.email },
-      token,
-    });
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    if (!decoded.isAdmin) return res.status(403).json({ message: "❌ Forbidden" });
+    req.admin = decoded;
+    next();
   } catch (err) {
-    console.error("Signup error:", err);
-    res.status(500).json({ message: "❌ Internal server error" });
+    return res.status(401).json({ message: "❌ Invalid token" });
+  }
+}
+
+// Admin: Get all reports
+app.get("/api/admin/reports", verifyAdmin, async (req, res) => {
+  try {
+    const missing = await Report.find().lean();
+    const accidents = await RoadAccident.find().lean();
+    const allReports = [...missing, ...accidents].sort(
+      (a, b) => new Date(b.dateSubmitted) - new Date(a.dateSubmitted)
+    );
+    res.json(allReports);
+  } catch (err) {
+    console.error("Admin fetch error:", err);
+    res.status(500).json({ message: "❌ Failed to fetch reports" });
   }
 });
 
-// Login
+// Admin: Update report
+app.put("/api/admin/reports/:id", verifyAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updated =
+      (await Report.findByIdAndUpdate(id, req.body, { new: true })) ||
+      (await RoadAccident.findByIdAndUpdate(id, req.body, { new: true }));
+    if (!updated) return res.status(404).json({ message: "❌ Report not found" });
+    res.json(updated);
+  } catch (err) {
+    console.error("Admin update error:", err);
+    res.status(500).json({ message: "❌ Failed to update report" });
+  }
+});
+
+// Admin: Delete report
+app.delete("/api/admin/reports/:id", verifyAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deleted = (await Report.findByIdAndDelete(id)) || (await RoadAccident.findByIdAndDelete(id));
+    if (!deleted) return res.status(404).json({ message: "❌ Report not found" });
+    res.json({ message: "✅ Report deleted" });
+  } catch (err) {
+    console.error("Admin delete error:", err);
+    res.status(500).json({ message: "❌ Failed to delete report" });
+  }
+});
+
+// ==========================
+// 📌 USER ROUTES
+// ==========================
+
+// User Login
 app.post("/api/login", async (req, res) => {
   try {
     const { username, password } = req.body;
-
-    if (!username || !password) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
+    if (!username || !password) return res.status(400).json({ message: "All fields are required" });
 
     const user = await User.findOne({ username });
-    if (!user) {
-      return res.status(400).json({ message: "Invalid username or password" });
-    }
+    if (!user) return res.status(400).json({ message: "Invalid username or password" });
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ message: "Invalid username or password" });
-    }
+    if (!isMatch) return res.status(400).json({ message: "Invalid username or password" });
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET || "secret", {
-      expiresIn: "1d",
-    });
-
-    res.json({
-      message: "✅ Login successful",
-      user: { id: user._id, username: user.username, email: user.email },
-      token,
-    });
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET || "secret", { expiresIn: "1d" });
+    res.json({ message: "✅ Login successful", user: { id: user._id, username: user.username, email: user.email, profilePhoto: user.profilePhoto }, token });
   } catch (err) {
     console.error("Login error:", err);
     res.status(500).json({ message: "❌ Internal server error" });
   }
 });
 
+// Update user profile
+app.put("/api/user/profile", upload.single("profilePhoto"), async (req, res) => {
+  try {
+    const token = req.headers["x-auth-token"];
+    if (!token) return res.status(401).json({ message: "❌ No token" });
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || "secret");
+    const userId = decoded.id;
+
+    const updateData = { username: req.body.username, email: req.body.email };
+
+    if (req.body.password) {
+      const hashed = await bcrypt.hash(req.body.password, 10);
+      updateData.password = hashed;
+    }
+
+    if (req.file) updateData.profilePhoto = `/uploads/${req.file.filename}`;
+
+    const updatedUser = await User.findByIdAndUpdate(userId, updateData, { new: true }).lean();
+    res.json({ message: "✅ Profile updated", user: updatedUser });
+  } catch (err) {
+    console.error("Profile update error:", err);
+    res.status(500).json({ message: "❌ Failed to update profile" });
+  }
+});
+
 // ==========================
-// 📌 EXISTING ROUTES
+// 📌 REPORT ROUTES
 // ==========================
 
-// Missing Report
+// Missing report
 app.post("/api/report-missing", upload.single("photo"), async (req, res) => {
   try {
     const { name, age, gender, lastSeenLocation, description } = req.body;
-
-    if (!name || !age || !gender || !lastSeenLocation || !description) {
+    if (!name || !age || !gender || !lastSeenLocation || !description)
       return res.status(400).json({ message: "All fields are required" });
-    }
 
     const newReport = new Report({
-      name,
-      age,
-      gender,
-      lastSeenLocation,
-      description,
+      name, age, gender, lastSeenLocation, description,
       photo: req.file ? `/uploads/${req.file.filename}` : null,
       title: `Missing Person Reported: ${name}`,
       article: `${name}, aged ${age}, identified as ${gender}, was last seen at ${lastSeenLocation}. Description: ${description}.`,
@@ -169,22 +226,15 @@ app.post("/api/report-missing", upload.single("photo"), async (req, res) => {
   }
 });
 
-// Accident Report
+// Accident report
 app.post("/api/report-accident", async (req, res) => {
   try {
     const { name, age, gender, location, injuryType, description } = req.body;
-
-    if (!name || !age || !gender || !location || !injuryType || !description) {
+    if (!name || !age || !gender || !location || !injuryType || !description)
       return res.status(400).json({ message: "All fields are required" });
-    }
 
     const newAccident = new RoadAccident({
-      name,
-      age,
-      gender,
-      location,
-      injuryType,
-      description,
+      name, age, gender, location, injuryType, description,
       title: `Accident Reported at ${location}`,
       article: `${name}, aged ${age}, identified as ${gender}, was in an accident at ${location}. Injury type: ${injuryType}. Description: ${description}.`,
       caseType: "road-accident",
@@ -198,16 +248,14 @@ app.post("/api/report-accident", async (req, res) => {
   }
 });
 
-// Fetch All Reports
+// Fetch all reports
 app.get("/api/reports", async (req, res) => {
   try {
     const missing = await Report.find().lean();
     const accidents = await RoadAccident.find().lean();
-    const allReports = [...missing, ...accidents];
-
-    // sort newest first
-    allReports.sort((a, b) => new Date(b.dateSubmitted) - new Date(a.dateSubmitted));
-
+    const allReports = [...missing, ...accidents].sort(
+      (a, b) => new Date(b.dateSubmitted) - new Date(a.dateSubmitted)
+    );
     res.json(allReports);
   } catch (err) {
     console.error("Fetch reports error:", err);
@@ -215,6 +263,8 @@ app.get("/api/reports", async (req, res) => {
   }
 });
 
+// ==========================
 // ✅ Start Server
+// ==========================
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

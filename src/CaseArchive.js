@@ -14,10 +14,11 @@ const CaseArchive = () => {
         const res = await axios.get('http://localhost:5000/api/reports');
         // Map missing and accident reports to have a "caseType" field
         const mappedReports = res.data.map(item => {
-          if (item.lastSeenLocation) return { ...item, caseType: 'missing' };
-          if (item.location) return { ...item, caseType: 'road-accident' };
-          return { ...item };
-        });
+  if (item.lastSeenLocation) return { ...item, caseType: 'missing', photo: item.photo || null };
+  if (item.location) return { ...item, caseType: 'road-accident', photo: item.photo || null };
+  return { ...item };
+});
+
 
         // Merge homepage articles (give them a type if needed)
         const mergedCases = [...articles.map(a => ({ ...a, caseType: a.caseType || "article" })), ...mappedReports];
@@ -83,11 +84,14 @@ const CaseArchive = () => {
             <div key={item._id || item.id} className="case-item">
               {(item.photo || item.image) && (
                 <img
-                  src={(item.photo || item.image)?.startsWith('http')
-                    ? (item.photo || item.image)
-                    : `http://localhost:5000${item.photo || item.image}`}
-                  alt={item.name || item.title}
-                />
+  src={(item.photo || item.image)?.startsWith('http')
+    ? (item.photo || item.image)
+    : item.photo || item.image
+      ? `http://localhost:5000${item.photo || item.image}`
+      : 'https://via.placeholder.com/150'} // fallback if no image
+  alt={item.name || item.title}
+/>
+
               )}
               <h3>{item.title || item.name}</h3>
               <p>{item.description || item.article}</p>
@@ -100,5 +104,6 @@ const CaseArchive = () => {
     </div>
   );
 };
+
 
 export default CaseArchive;
