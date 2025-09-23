@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import './App.css';
 import logo from './logo.svg';
@@ -14,6 +14,7 @@ import ReportMissing from './ReportMissing';
 import ReportAccident from './ReportAccident';
 import UserProfileSidebar from './UserProfileSidebar';
 import HelpBoard from './HelpBoard';
+import axios from 'axios';
 
 // Navbar Component
 function Navbar({ toggleUserProfile }) {
@@ -86,6 +87,25 @@ function Navbar({ toggleUserProfile }) {
 }
 
 function HomePage() {
+  const [stats, setStats] = useState({
+    totalCases: 0,
+    reports: 0,
+    roadAccidents: 0,
+    resolvedCases: 0,
+  });
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/stats");
+        setStats(res.data);
+      } catch (err) {
+        console.error("Error fetching stats:", err);
+      }
+    };
+    fetchStats();
+  }, []);
+
   return (
     <div className="App">
       <header className="hero">
@@ -107,24 +127,25 @@ function HomePage() {
 
       <ArticleSlider />
 
+      {/* ✅ Dynamic Statistics */}
       <section className="statistics-section">
         <div className="statistic-item">
           <Link to="/case-archive">
             <h3>Total Cases</h3>
-            <p>1234</p>
+            <p>{stats.totalCases}</p>
           </Link>
         </div>
         <div className="statistic-item">
           <h3>Reports</h3>
-          <p>567</p>
+          <p>{stats.reports}</p>
         </div>
         <div className="statistic-item">
           <h3>Road Accidents</h3>
-          <p>89</p>
+          <p>{stats.roadAccidents}</p>
         </div>
         <div className="statistic-item">
           <h3>Resolved Cases</h3>
-          <p>1000</p>
+          <p>{stats.resolvedCases}</p>
         </div>
       </section>
 
