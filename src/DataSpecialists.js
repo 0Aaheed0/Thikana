@@ -6,39 +6,39 @@ import './DataSpecialists.css';
 
 const specialists = [
   {
-    name: 'Dr. Jane Doe',
+    name: 'Dr. Abdul Karim',
     title: 'Criminal Data Analyst',
     image: 'https://images.pexels.com/photos/3763188/pexels-photo-3763188.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    description: 'Dr. Doe is a leading expert in criminal data analysis, with over 15 years of experience in the field. She specializes in predictive modeling and crime pattern analysis.',
-    contact: 'jane.doe@gmail.com'
+    description: 'Dr.Karim is a leading expert in criminal data analysis, with over 15 years of experience in the field. She specializes in predictive modeling and crime pattern analysis.',
+    contact: 'karim@gmail.com'
   },
   {
-    name: 'John Smith',
+    name: 'Jarek Tia',
     title: 'Missing Persons Specialist',
     image: 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    description: 'John Smith is a retired detective who now works as a consultant on missing person cases. He has a deep understanding of investigation techniques and data analysis.',
-    contact: 'john.smith@gmail.com'
+    description: 'Tia is a retired detective who now works as a consultant on missing person cases. He has a deep understanding of investigation techniques and data analysis.',
+    contact: 'tia@gmail.com'
   },
   {
-    name: 'Dr. Emily White',
+    name: 'Dr. Sneha Jaman',
     title: 'Road Accident Analyst',
     image: 'https://images.pexels.com/photos/1181690/pexels-photo-1181690.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    description: 'Dr. White is a data scientist who specializes in analyzing road accident data. Her work helps to identify dangerous intersections and develop strategies to improve road safety.',
-    contact: 'emily.white@gmail.com'
+    description: 'Dr. Sneha is a data scientist who specializes in analyzing road accident data. Her work helps to identify dangerous intersections and develop strategies to improve road safety.',
+    contact: 'sneha@gmail.com'
   },
   {
-    name: 'David Chen',
+    name: 'Orchid Chakma',
     title: 'Cybercrime Investigator',
     image: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    description: 'David Chen is a cybercrime investigator with a focus on online fraud and data breaches. He has a background in computer science and digital forensics.',
-    contact: 'david.chen@gmail.com'
+    description: 'orchid is a cybercrime investigator with a focus on online fraud and data breaches. He has a background in computer science and digital forensics.',
+    contact: 'orchid@gmail.com'
   },
   {
-    name: 'Maria Garcia',
+    name: 'Nusrat Jahan',
     title: 'Forensic Anthropologist',
     image: 'https://images.pexels.com/photos/1130626/pexels-photo-1130626.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    description: 'Maria Garcia is a forensic anthropologist who assists in the identification of human remains. Her work is crucial in solving cold cases and bringing closure to families.',
-    contact: 'maria.garcia@gmail.com'
+    description: 'Nusrat is a forensic anthropologist who assists in the identification of human remains. Her work is crucial in solving cold cases and bringing closure to families.',
+    contact: 'Nusrat@gmail.com'
   }
 ];
 

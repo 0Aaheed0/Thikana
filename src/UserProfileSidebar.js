@@ -9,9 +9,19 @@ const UserProfileSidebar = ({ user, onClose, isOpen }) => {
   const [email, setEmail] = useState(user.email || "");
   const [password, setPassword] = useState('');
   const [profilePhoto, setProfilePhoto] = useState(null);
+  const [previewSrc, setPreviewSrc] = useState(
+    user.profilePhoto ? `http://localhost:5000${user.profilePhoto}` : 'https://via.placeholder.com/150'
+  );
 
-  const handlePhotoChange = e => { if (e.target.files[0]) setProfilePhoto(e.target.files[0]); };
+  // Handle file selection and live preview
+  const handlePhotoChange = e => {
+    if (e.target.files[0]) {
+      setProfilePhoto(e.target.files[0]);
+      setPreviewSrc(URL.createObjectURL(e.target.files[0])); // immediate preview
+    }
+  };
 
+  // Handle profile update
   const handleUpdate = async e => {
     e.preventDefault();
     const formData = new FormData();
@@ -27,12 +37,12 @@ const UserProfileSidebar = ({ user, onClose, isOpen }) => {
         headers: { 'x-auth-token': token },
         body: formData
       });
-      if (res.ok) {
-        const data = await res.json();
-
-        // ✅ Update user in context + localStorage
-        updateUser(data.user);
-        localStorage.setItem("user", JSON.stringify(data.user));
+if (res.ok) {
+  const data = await res.json();
+  updateUser(data.user); // update global state
+  setPreviewSrc(`http://localhost:5000${data.user.profilePhoto}?t=${Date.now()}`); // refresh preview with uploaded image
+  setProfilePhoto(null); // reset local file
+}
 
         onClose();
       } else {
@@ -43,10 +53,9 @@ const UserProfileSidebar = ({ user, onClose, isOpen }) => {
     }
   };
 
-  // ✅ Pull updated photo from user in context/localStorage
-  const profileSrc = user?.profilePhoto
-    ? `http://localhost:5000${user.profilePhoto}`
-    : 'https://via.placeholder.com/150';
+const profileSrc = user?.profilePhoto
+  ? `http://localhost:5000${user.profilePhoto}?t=${Date.now()}`
+  : 'https://via.placeholder.com/150';
 
   return (
     <div className={`user-profile-sidebar ${isOpen ? 'open' : ''}`}>
@@ -55,14 +64,23 @@ const UserProfileSidebar = ({ user, onClose, isOpen }) => {
         <button onClick={logout} className="logout-btn">Logout</button>
       </div>
       <div className="profile-photo-section">
-        <img src={profileSrc} alt="Profile" className="profile-photo"/>
+        <img src={previewSrc} alt="Profile" className="profile-photo"/>
         <label htmlFor="photo-upload" className="photo-upload-label">Change Photo</label>
         <input id="photo-upload" type="file" onChange={handlePhotoChange}/>
       </div>
       <form onSubmit={handleUpdate} className="profile-form">
-        <label>Username<input type="text" value={username} onChange={e => setUsername(e.target.value)}/></label>
-        <label>Email<input type="email" value={email} onChange={e => setEmail(e.target.value)}/></label>
-        <label>New Password<input type="password" value={password} onChange={e => setPassword(e.target.value)}/></label>
+        <label>
+          Username
+          <input type="text" value={username} onChange={e => setUsername(e.target.value)} />
+        </label>
+        <label>
+          Email
+          <input type="email" value={email} onChange={e => setEmail(e.target.value)} />
+        </label>
+        <label>
+          New Password
+          <input type="password" value={password} onChange={e => setPassword(e.target.value)} />
+        </label>
         <button type="submit">Save Changes</button>
       </form>
     </div>
