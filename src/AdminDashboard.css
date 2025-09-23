@@ -1,0 +1,122 @@
+.admin-dashboard {
+  padding: 30px;
+  max-width: 900px;
+  margin: auto;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.dashboard-title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 26px;
+  color: #222;
+}
+
+.reports-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.report-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.report-card:hover {
+  transform: translateY(-4px);
+}
+
+.report-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.report-header h3 {
+  margin: 0;
+  font-size: 20px;
+  color: #333;
+}
+
+.report-index {
+  background: #007bff;
+  color: white;
+  font-weight: bold;
+  padding: 6px 12px;
+  border-radius: 8px;
+  margin-right: 10px;
+}
+
+.report-body {
+  margin: 15px 0;
+  color: #555;
+}
+
+.report-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.btn.edit {
+  background: #ffc107;
+  color: #222;
+}
+
+.btn.edit:hover {
+  background: #e0a800;
+}
+
+.btn.delete {
+  background: #dc3545;
+  color: white;
+}
+
+.btn.delete:hover {
+  background: #c82333;
+}
+
+.btn.save {
+  background: #28a745;
+  color: white;
+}
+
+.btn.save:hover {
+  background: #218838;
+}
+
+.btn.cancel {
+  background: #6c757d;
+  color: white;
+}
+
+.btn.cancel:hover {
+  background: #5a6268;
+}
+
+/* Editable fields */
+.report-card input,
+.report-card textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 6px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.report-card textarea {
+  min-height: 80px;
+}
