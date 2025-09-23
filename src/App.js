@@ -14,6 +14,7 @@ import ReportMissing from './ReportMissing';
 import ReportAccident from './ReportAccident';
 import UserProfileSidebar from './UserProfileSidebar';
 import HelpBoard from './HelpBoard';
+import AdminPanel from './AdminPanel';
 import axios from 'axios';
 
 // Navbar Component
@@ -46,6 +47,9 @@ function Navbar({ toggleUserProfile }) {
         </Link>
         <Link to="/help-board" className="navbar-link">
           <i className="fas fa-question-circle"></i> Help Board
+        </Link>
+        <Link to="/admin" className="navbar-link">
+          <i className="fas fa-user-shield"></i> Admin
         </Link>
       </div>
 
@@ -87,25 +91,6 @@ function Navbar({ toggleUserProfile }) {
 }
 
 function HomePage() {
-  const [stats, setStats] = useState({
-    totalCases: 0,
-    reports: 0,
-    roadAccidents: 0,
-    resolvedCases: 0,
-  });
-
-  useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const res = await axios.get("http://localhost:5000/api/stats");
-        setStats(res.data);
-      } catch (err) {
-        console.error("Error fetching stats:", err);
-      }
-    };
-    fetchStats();
-  }, []);
-
   return (
     <div className="App">
       <header className="hero">
@@ -115,9 +100,6 @@ function HomePage() {
             Your trusted platform for reporting and tracking incidents. We are here to help you make a difference.
           </p>
           <div className="report-options">
-            <Link to="/report-accident">
-              <button className="report-button">Report Road Accident</button>
-            </Link>
             <Link to="/report-missing">
               <button className="report-button">Report Missing</button>
             </Link>
@@ -126,28 +108,6 @@ function HomePage() {
       </header>
 
       <ArticleSlider />
-
-      {/* ✅ Dynamic Statistics */}
-      <section className="statistics-section">
-        <div className="statistic-item">
-          <Link to="/case-archive">
-            <h3>Total Cases</h3>
-            <p>{stats.totalCases}</p>
-          </Link>
-        </div>
-        <div className="statistic-item">
-          <h3>Reports</h3>
-          <p>{stats.reports}</p>
-        </div>
-        <div className="statistic-item">
-          <h3>Road Accidents</h3>
-          <p>{stats.roadAccidents}</p>
-        </div>
-        <div className="statistic-item">
-          <h3>Resolved Cases</h3>
-          <p>{stats.resolvedCases}</p>
-        </div>
-      </section>
 
       <DataSpecialists />
       <Organizations />
@@ -199,6 +159,7 @@ function App() {
         <Route path="/report-missing" element={<ReportMissing />} />
         <Route path="/report-accident" element={<ReportAccident />} />
         <Route path="/help-board" element={<HelpBoard />} />
+        <Route path="/admin" element={<AdminPanel />} />
       </Routes>
     </Router>
   );

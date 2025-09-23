@@ -7,7 +7,8 @@ const RoadAccidentSchema = new mongoose.Schema({
   location: { type: String, required: true },
   injuryType: { type: String, required: true },
   description: { type: String, required: true },
-  dateSubmitted: { type: Date, default: Date.now }
+  dateSubmitted: { type: Date, default: Date.now },
+  type: { type: String, default: 'road-accident' }, // Add type field
 });
 
 export default mongoose.model("RoadAccident", RoadAccidentSchema);

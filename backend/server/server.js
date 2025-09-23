@@ -6,13 +6,24 @@ import multer from "multer";
 import path from "path";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import session from "express-session";
+import passport from "passport";
+import githubAuth from "./githubAuth.js";  // ✅ FIXED (added .js and import)
 
 // ✅ Load env variables
 dotenv.config();
 
 const app = express();
-app.use(cors({ origin: "http://localhost:3000" }));
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 app.use(express.json());
+app.use(session({
+  secret: process.env.SESSION_SECRET || "supersecret",
+  resave: false,
+  saveUninitialized: false,
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use("/api", githubAuth);
 app.use("/uploads", express.static("uploads")); // serve uploaded photos
 
 // ✅ MongoDB Connection
@@ -143,7 +154,7 @@ app.post("/api/login", async (req, res) => {
 // Missing Report
 app.post("/api/report-missing", upload.single("photo"), async (req, res) => {
   try {
-    const { name, age, gender, lastSeenLocation, description } = req.body;
+  const { name, age, gender, lastSeenLocation, description, type } = req.body;
 
     if (!name || !age || !gender || !lastSeenLocation || !description) {
       return res.status(400).json({ message: "All fields are required" });
@@ -159,6 +170,7 @@ app.post("/api/report-missing", upload.single("photo"), async (req, res) => {
       title: `Missing Person Reported: ${name}`,
       article: `${name}, aged ${age}, identified as ${gender}, was last seen at ${lastSeenLocation}. Description: ${description}.`,
       caseType: "missing",
+      type: type || "missing",
     });
 
     await newReport.save();
@@ -172,7 +184,7 @@ app.post("/api/report-missing", upload.single("photo"), async (req, res) => {
 // Accident Report
 app.post("/api/report-accident", async (req, res) => {
   try {
-    const { name, age, gender, location, injuryType, description } = req.body;
+  const { name, age, gender, location, injuryType, description, type } = req.body;
 
     if (!name || !age || !gender || !location || !injuryType || !description) {
       return res.status(400).json({ message: "All fields are required" });
@@ -188,6 +200,7 @@ app.post("/api/report-accident", async (req, res) => {
       title: `Accident Reported at ${location}`,
       article: `${name}, aged ${age}, identified as ${gender}, was in an accident at ${location}. Injury type: ${injuryType}. Description: ${description}.`,
       caseType: "road-accident",
+      type: type || "road-accident",
     });
 
     await newAccident.save();

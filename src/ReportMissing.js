@@ -10,6 +10,7 @@ const ReportMissing = () => {
     lastSeenLocation: "",
     description: "",
     photo: null,
+    type: "missing", // Explicitly set type for missing reports
   });
 
   const [status, setStatus] = useState(null);
@@ -32,7 +33,8 @@ const ReportMissing = () => {
       data.append('gender', formData.gender);
       data.append('lastSeenLocation', formData.lastSeenLocation);
       data.append('description', formData.description);
-      if (formData.photo) data.append('photo', formData.photo);
+  if (formData.photo) data.append('photo', formData.photo);
+  data.append('type', 'missing'); // Always append type for missing
 
       const response = await axios.post('http://localhost:5000/api/report-missing', data, {
         headers: { 'Content-Type': 'multipart/form-data' }
@@ -41,7 +43,7 @@ const ReportMissing = () => {
       if (response.status === 201) {
         setStatus("success");
         alert("✅ Report submitted successfully!");
-        setFormData({ name:"", age:"", gender:"", lastSeenLocation:"", description:"", photo:null });
+  setFormData({ name:"", age:"", gender:"", lastSeenLocation:"", description:"", photo:null, type:"missing" });
       } else {
         setStatus("error");
         alert("❌ Failed to submit report.");

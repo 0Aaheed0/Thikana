@@ -10,6 +10,7 @@ const ReportAccident = () => {
     location: '',
     injuryType: '',
     description: '',
+    type: 'road-accident', // Explicitly set type for accident reports
   });
 
   const [status, setStatus] = useState(null);
@@ -22,11 +23,11 @@ const ReportAccident = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/report-accident', formData);
+  const response = await axios.post('http://localhost:5000/api/report-accident', formData);
       if (response.status === 201) {
         setStatus("success");
         alert("✅ Accident report submitted successfully!");
-        setFormData({ name:'', age:'', gender:'', location:'', injuryType:'', description:'' });
+  setFormData({ name:'', age:'', gender:'', location:'', injuryType:'', description:'', type:'road-accident' });
       } else {
         setStatus("error");
         alert("❌ Failed to submit report.");
