@@ -7,6 +7,7 @@ const reportSchema = new mongoose.Schema({
   lastSeenLocation: { type: String, required: true },
   description: { type: String, required: true },
   photo: { type: String }, // store filename
+  type: { type: String, default: 'missing' }, // Add type field
 }, { timestamps: true });
 
 const Report = mongoose.model("Report", reportSchema);

@@ -22,10 +22,18 @@ const UserProfileSidebar = ({ user, onClose, isOpen }) => {
 
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch('http://localhost:5000/api/user/profile', { method: 'PUT', headers: { 'x-auth-token': token }, body: formData });
+      const res = await fetch('http://localhost:5000/api/user/profile', {
+        method: 'PUT',
+        headers: { 'x-auth-token': token },
+        body: formData
+      });
       if (res.ok) {
         const data = await res.json();
+
+        // ✅ Update user in context + localStorage
         updateUser(data.user);
+        localStorage.setItem("user", JSON.stringify(data.user));
+
         onClose();
       } else {
         console.error('Failed to update profile:', await res.text());
@@ -35,7 +43,10 @@ const UserProfileSidebar = ({ user, onClose, isOpen }) => {
     }
   };
 
-  const profileSrc = user.profilePhoto ? `http://localhost:5000${user.profilePhoto}` : 'https://via.placeholder.com/150';
+  // ✅ Pull updated photo from user in context/localStorage
+  const profileSrc = user?.profilePhoto
+    ? `http://localhost:5000${user.profilePhoto}`
+    : 'https://via.placeholder.com/150';
 
   return (
     <div className={`user-profile-sidebar ${isOpen ? 'open' : ''}`}>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import './App.css';
 import logo from './logo.svg';
@@ -17,6 +17,7 @@ import HelpBoard from './HelpBoard';
 import AdminLoginPage from './AdminLoginPage';
 import AdminDashboard from './AdminDashboard';
 
+
 // Navbar Component
 function Navbar({ toggleUserProfile }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -32,12 +33,13 @@ function Navbar({ toggleUserProfile }) {
       </div>
 
       <div className="navbar-center">
-        <Link to="/" className="navbar-link"><i className="fas fa-home"></i> Home</Link>
-        <Link to="/case-archive" className="navbar-link"><i className="fas fa-archive"></i> Case Archive</Link>
-        <Link to="/report-missing" className="navbar-link"><i className="fas fa-user-slash"></i> Report Missing</Link>
-        <Link to="/report-accident" className="navbar-link"><i className="fas fa-car-crash"></i> Report Accident</Link>
-        <Link to="/help-board" className="navbar-link"><i className="fas fa-question-circle"></i> Help Board</Link>
-        <Link to="/admin-login" className="navbar-link"><i className="fas fa-user-shield"></i> Admin</Link>
+<Link to="/" className="navbar-link"><i className="fas fa-home"></i> Home</Link>
+<Link to="/case-archive" className="navbar-link"><i className="fas fa-archive"></i> Case Archive</Link>
+<Link to="/report-missing" className="navbar-link"><i className="fas fa-user-slash"></i> Report Missing</Link>
+<Link to="/report-accident" className="navbar-link"><i className="fas fa-car-crash"></i> Report Accident</Link>
+<Link to="/help-board" className="navbar-link"><i className="fas fa-question-circle"></i> Help Board</Link>
+<Link to="/admin-login" className="navbar-link"><i className="fas fa-user-shield"></i> Admin</Link>
+
       </div>
 
       <div className="navbar-right">
@@ -85,13 +87,19 @@ function HomePage() {
             Your trusted platform for reporting and tracking incidents. We are here to help you make a difference.
           </p>
           <div className="report-options">
-            <Link to="/report-accident"><button className="report-button">Report Road Accident</button></Link>
-            <Link to="/report-missing"><button className="report-button">Report Missing</button></Link>
+<Link to="/report-accident">
+  <button className="report-button">Report Road Accident</button>
+</Link>
+<Link to="/report-missing">
+  <button className="report-button">Report Missing</button>
+</Link>
+
           </div>
         </div>
       </header>
 
       <ArticleSlider />
+
       <DataSpecialists />
       <Organizations />
 
@@ -140,8 +148,9 @@ function App() {
         <Route path="/report-missing" element={<ReportMissing />} />
         <Route path="/report-accident" element={<ReportAccident />} />
         <Route path="/help-board" element={<HelpBoard />} />
-        <Route path="/admin-login" element={<AdminLoginPage />} />
-        <Route path="/admin-dashboard" element={<AdminDashboard />} />
+<Route path="/admin-login" element={<AdminLoginPage />} />
+<Route path="/admin-dashboard" element={<AdminDashboard />} />
+
       </Routes>
     </Router>
   );
